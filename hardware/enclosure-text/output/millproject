@@ -1,0 +1,20 @@
+# general
+
+metric = true
+metricoutput = true
+nog64 = true
+nom6 = true
+zchange = 2.0mm
+zsafe = 2.0mm
+
+front = main-User_9.gbr
+front-output = main-User_9.gbr.ngc
+
+# milling
+
+mill-diameters = 0.15mm
+mill-feed = 75mm/min
+mill-infeed = 0.1mm
+mill-speed = 2000rpm
+zwork = -0.4mm
+invert-gerbers = true

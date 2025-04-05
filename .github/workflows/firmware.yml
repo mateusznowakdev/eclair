@@ -1,0 +1,33 @@
+name: Build UF2 firmware
+env:
+  TINYGO_VERSION: "0.37.0"
+on:
+  push:
+    tags:
+      - "*"
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: firmware/go.mod
+      - name: Install TinyGo
+        run: |
+          sudo apt-get update && sudo apt-get install wget -y
+          wget -nv https://github.com/tinygo-org/tinygo/releases/download/v${TINYGO_VERSION}/tinygo_${TINYGO_VERSION}_amd64.deb
+          sudo apt-get install ./tinygo_${TINYGO_VERSION}_amd64.deb -y
+          rm tinygo_${TINYGO_VERSION}_amd64.deb
+      - name: Build UF2 file
+        working-directory: firmware
+        run: |
+          tinygo build -target ./eclair.json -size full -o eclair-firmware-${GITHUB_REF_NAME}-$(date +%Y%m%d).uf2
+      - name: Create draft release
+        working-directory: firmware
+        run: |
+          gh release create ${GITHUB_REF_NAME} --draft *.uf2
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Font Editor</title>
+    <style>
+      .glyph {
+        display: flex;
+      }
+
+      .glyph .col {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .glyph .col input[type="checkbox"] {
+        appearance: none;
+        background-color: #eee;
+        height: 2rem;
+        margin: 1px;
+        width: 2rem;
+      }
+
+      .glyph .col input[type="checkbox"]:nth-child(n + 5):nth-child(-n + 13) {
+        background-color: #ddd;
+      }
+
+      .glyph .col input[type="checkbox"]:checked {
+        background-color: #777 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="glyph" id="glyph"></div>
+    <p>
+      <button id="load">Load</button>
+    </p>
+    <pre id="code"></pre>
+    <script>
+      const WIDTH = 10;
+      const HEIGHT = 16;
+
+      const glyph = document.getElementById("glyph");
+      const button = document.getElementById("load");
+      const code = document.getElementById("code");
+
+      const data = new Array(WIDTH).fill(0);
+
+      function askForCode() {
+        const newData = prompt()
+          .split(",")
+          .map((c) => +c);
+
+        while (newData.length < WIDTH) {
+          newData.push(0);
+        }
+        while (newData.length > WIDTH) {
+          newData.pop();
+        }
+
+        for (const i in newData) data[i] = newData[i];
+
+        updateGlyphFromData();
+        updateCodeFromData();
+      }
+
+      function handleInputChecked(x, y) {
+        data[x] ^= 1 << y;
+        updateCodeFromData();
+      }
+
+      function resetGlyph() {
+        glyph.innerHTML = "";
+
+        for (let x = 0; x < WIDTH; x++) {
+          const col = document.createElement("div");
+          col.className = "col";
+
+          for (let y = 0; y < HEIGHT; y++) {
+            const check = document.createElement("input");
+            check.onchange = () => handleInputChecked(x, y);
+            check.type = "checkbox";
+
+            col.appendChild(check);
+          }
+
+          glyph.appendChild(col);
+        }
+      }
+
+      function updateGlyphFromData() {
+        for (let x = 0; x < WIDTH; x++) {
+          const col = glyph.children[x];
+
+          for (let y = 0; y < HEIGHT; y++) {
+            const check = col.children[y];
+            check.checked = data[x] & (1 << y);
+          }
+        }
+      }
+
+      function updateCodeFromData() {
+        const text = [];
+
+        for (const value of data) {
+          text.push("0x" + value.toString(16).padStart(4, "0"));
+        }
+
+        code.innerHTML = text.join(", ");
+      }
+
+      resetGlyph();
+      updateGlyphFromData();
+      updateCodeFromData();
+      button.onclick = askForCode;
+    </script>
+  </body>
+</html>
