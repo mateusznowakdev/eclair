@@ -5,8 +5,9 @@
 	(uuid "8c2a105f-a962-4917-8f56-dd50da121d32")
 	(paper "A4")
 	(title_block
-		(title "ECLAIR USB KEYBOARD")
-		(rev "B")
+		(title "ECLAIR POCKET NOTEPAD")
+		(date "2025-04-09")
+		(rev "C")
 	)
 	(lib_symbols
 		(symbol "Battery_Management:AP9101CK6"
@@ -1749,21 +1750,19 @@
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "R"
-				(at 0.762 0.508 0)
+				(at 0 0 90)
 				(effects
 					(font
-						(size 1.27 1.27)
+						(size 1.016 1.016)
 					)
-					(justify left)
 				)
 			)
 			(property "Value" "R_Small"
-				(at 0.762 -1.016 0)
+				(at 1.778 0 90)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify left)
 				)
 			)
 			(property "Footprint" ""
@@ -5175,6 +5174,16 @@
 	)
 	(wire
 		(pts
+			(xy 254 151.13) (xy 254 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1de8aaf4-2130-46fc-a6ad-6f11d1a2d103")
+	)
+	(wire
+		(pts
 			(xy 128.27 161.29) (xy 110.49 161.29)
 		)
 		(stroke
@@ -7523,6 +7532,16 @@
 		)
 		(uuid "c21e88fa-7626-456d-91b4-07613fa7a04f")
 	)
+	(label "GND"
+		(at 254 157.48 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c5450dcb-9798-4a32-b48f-fad82233a921")
+	)
 	(label "SPI_MOSI"
 		(at 261.62 81.28 270)
 		(effects
@@ -8886,6 +8905,72 @@
 			(project ""
 				(path "/8c2a105f-a962-4917-8f56-dd50da121d32"
 					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 254 151.13 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "3f90a2a5-7f33-4fe8-9037-6cb5956ec308")
+		(property "Reference" "TP10"
+			(at 252.222 145.288 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "~"
+			(at 256.54 149.0979 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "main:TestPoint_Pad_2.0x2.5mm"
+			(at 259.08 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 259.08 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 254 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "94a96f32-06d0-43ae-b8f8-58d9800dbf56")
+		)
+		(instances
+			(project "main"
+				(path "/8c2a105f-a962-4917-8f56-dd50da121d32"
+					(reference "TP10")
 					(unit 1)
 				)
 			)
