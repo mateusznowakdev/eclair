@@ -18,14 +18,11 @@ c = 0.25;
 z = 3.25 + tZ;
 
 module mBase() {
-  oX = tX + c;
-  oY = tY + c;
+  x = pX + 2 * tX;
+  y = pY + 2 * tY;
   r = 3.5;
 
-  x = pX + 2 * oX;
-  y = pY + 2 * oY;
-
-  translate([-oX, -oY])
+  translate([-tX, -tY])
     linear_extrude(tZ)
       rsquare([x, y], r);
 }
@@ -33,12 +30,12 @@ module mBase() {
 module mSnaps() {
   snaps = [
     // clockwise
-    [[0, 0, -90], (pX-20)/2, pY],
-    [[0, 0, -90], (pX+20)/2, pY],
+    [[0, 0, -90], (pX-22)/2, pY],
+    [[0, 0, -90], (pX+22)/2, pY],
     [[0, 0, 180], pX,        pY*1/2],
     [[0, 0, 180], pX,        pY*1/10],
-    [[0, 0, 90],  (pX+20)/2, 0],
-    [[0, 0, 90],  (pX-20)/2, 0],
+    [[0, 0, 90],  (pX+22)/2, 0],
+    [[0, 0, 90],  (pX-22)/2, 0],
     [[0, 0, 0],   0,         pY*1/10],
     [[0, 0, 0],   0,         pY*1/2],
   ];
