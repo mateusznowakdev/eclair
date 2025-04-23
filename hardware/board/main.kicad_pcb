@@ -11902,7 +11902,7 @@
 			)
 			(fill no)
 			(layer "B.SilkS")
-			(uuid "081e1894-7a15-4091-bdd8-3ea0858acc71")
+			(uuid "1317f671-6001-45cf-8cae-e9cdf3195421")
 		)
 		(fp_text user "${REFERENCE}"
 			(at 0 -2.5 0)
@@ -11920,7 +11920,7 @@
 		(pad "1" smd rect
 			(at -3 0 180)
 			(size 2 2.5)
-			(layers "B.Cu" "B.Mask" "B.Paste")
+			(layers "B.Cu" "B.Mask")
 			(net 6 "-BATT")
 			(pinfunction "Pin_1")
 			(pintype "passive")
@@ -11930,7 +11930,7 @@
 		(pad "2" smd rect
 			(at 3 0 180)
 			(size 2 2.5)
-			(layers "B.Cu" "B.Mask" "B.Paste")
+			(layers "B.Cu" "B.Mask")
 			(net 4 "+BATT")
 			(pinfunction "Pin_2")
 			(pintype "passive")
