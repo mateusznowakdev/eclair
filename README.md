@@ -1,4 +1,4 @@
-# Eclair
+# EclairM0
 
 [Project description](https://mateusznowak.dev/eclair) and [build instructions](https://mateusznowak.dev/eclair/build) can be found on my website.
 

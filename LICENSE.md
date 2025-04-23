@@ -20,4 +20,4 @@ This Source is distributed WITHOUT ANY EXPRESS OR IMPLIED WARRANTY, INCLUDING OF
 
 Source Location: https://mateusznowak.dev/eclair, https://github.com/mateusznowakdev/eclair
 
-As per CERN-OHL-W v2 section 4.1, should You produce hardware based on this Source, You must maintain the Source Location visible on the external case and/or on the printed circuit board of Eclair or other products You make using this Source.
+As per CERN-OHL-W v2 section 4.1, should You produce hardware based on this Source, You must maintain the Source Location visible on the external case and/or on the printed circuit board of EclairM0 or other products You make using this Source.

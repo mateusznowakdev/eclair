@@ -13284,7 +13284,7 @@
 			(justify left mirror)
 		)
 	)
-	(gr_text "Eclair Rev.C - mateusznowak.dev/eclair"
+	(gr_text "EclairM0 Rev.C - mateusznowak.dev/eclair"
 		(at 50.8 66.3575 0)
 		(layer "B.SilkS")
 		(uuid "a2bd3748-31bb-41e0-9794-88241938ea7c")
