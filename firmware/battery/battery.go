@@ -1,8 +1,11 @@
 package battery
 
-import "machine"
+import (
+	"device/sam"
+	"machine"
+)
 
-const threshold = 3400 // mV
+const threshold = 3300 // mV
 const hysteresis = 100 // mV
 
 type Battery struct {
@@ -12,20 +15,21 @@ type Battery struct {
 }
 
 // NewBattery creates a new Battery instance and configures the underlying ADC
-// channel.
+// channel using 1V fixed reference voltage.
 func NewBattery() Battery {
 	machine.InitADC()
 
 	adc := machine.ADC{Pin: machine.PA02}
 	adc.Configure(machine.ADCConfig{})
 
+	sam.ADC.INPUTCTRL.ReplaceBits(sam.ADC_INPUTCTRL_GAIN_1X, 0xF, sam.ADC_INPUTCTRL_GAIN_Pos)
+	sam.ADC.REFCTRL.ReplaceBits(sam.ADC_REFCTRL_REFSEL_INT1V, 0xF, sam.ADC_REFCTRL_REFSEL_Pos)
+
 	return Battery{adc: adc}
 }
 
 func (b *Battery) refresh() {
-	// the maximum raw value is 65535 and maximum read voltage is 6600mV
-	// dividing raw value by 10 seems to give more accurate results
-	b.voltage = int(b.adc.Get()) / 10
+	b.voltage = int(b.adc.Get()) * 5250 / 65535
 
 	if b.voltage < threshold {
 		b.good = false
@@ -39,4 +43,11 @@ func (b *Battery) refresh() {
 func (b *Battery) Good() bool {
 	b.refresh()
 	return b.good
+}
+
+// Voltage reads the current battery voltage and returns the value in
+// millivolts.
+func (b *Battery) Voltage() int {
+	b.refresh()
+	return b.voltage
 }

@@ -5641,7 +5641,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "33K"
+		(property "Value" "22K"
 			(at 0 -1.65 90)
 			(layer "B.Fab")
 			(uuid "d2948d97-b023-4edd-a694-4d14894e08de")
@@ -7541,7 +7541,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "33K"
+		(property "Value" "5.1K"
 			(at 0 -1.65 90)
 			(layer "B.Fab")
 			(uuid "49bd4811-70c2-4f9c-a985-afe0c4ff1ba4")
