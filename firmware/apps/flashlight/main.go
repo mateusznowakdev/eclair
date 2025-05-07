@@ -10,7 +10,7 @@ import (
 func Run() {
 	// - display -
 
-	disp := display.NewDisplay()
+	disp := display.New()
 
 	disp.ClearBuffer()
 	disp.DrawText([]byte("- hold any key -"), 1, 10)
@@ -30,7 +30,7 @@ func Run() {
 		}
 	}
 
-	keys := keypad.NewKeypad()
+	keys := keypad.New()
 
 	keys.SetHandlers([]func(keypad.EventType){
 		func(et keypad.EventType) {
@@ -58,7 +58,7 @@ func Run() {
 	// - main loop -
 
 	for {
-		watchdog.FeedWatchdog()
+		watchdog.Feed()
 		keys.Scan()
 	}
 }

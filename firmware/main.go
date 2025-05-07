@@ -10,10 +10,10 @@ import (
 )
 
 func main() {
-	brownout.ConfigureBOD33()
-	watchdog.ConfigureWatchdog()
-	clocks.ConfigureCPUClock()
-	clocks.ConfigureUSBClock()
+	brownout.Configure()
+	watchdog.Configure()
+	clocks.ConfigureCPU()
+	clocks.ConfigureUSB()
 
 	if reset.IsSoftReset() {
 		launcher.Run()

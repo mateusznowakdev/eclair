@@ -143,11 +143,11 @@ func Run() {
 
 	// - display -
 
-	disp := display.NewDisplay()
+	disp := display.New()
 
 	// - keypad -
 
-	keys := keypad.NewKeypad()
+	keys := keypad.New()
 
 	keys.SetBoolHandlers([]func(keypad.EventType) bool{
 		func(et keypad.EventType) bool {
@@ -197,14 +197,14 @@ func Run() {
 
 	// - battery -
 
-	batt := battery.NewBattery()
+	batt := battery.New()
 
 	// - main loop -
 
 	refreshDisplay(disp, batt, note)
 
 	for {
-		watchdog.FeedWatchdog()
+		watchdog.Feed()
 
 		changed, err := note.writeDelayed()
 		if err != nil {

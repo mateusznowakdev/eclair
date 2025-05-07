@@ -43,11 +43,11 @@ func Run() {
 
 	// - display -
 
-	disp := display.NewDisplay()
+	disp := display.New()
 
 	// - keypad -
 
-	keys := keypad.NewKeypad()
+	keys := keypad.New()
 
 	keys.SetHandlers([]func(keypad.EventType){
 		nil,
@@ -89,7 +89,7 @@ func Run() {
 	refreshDisplay(disp, pos)
 
 	for {
-		watchdog.FeedWatchdog()
+		watchdog.Feed()
 		keys.Scan()
 	}
 }

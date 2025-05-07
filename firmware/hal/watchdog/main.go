@@ -6,10 +6,10 @@ import (
 	"eclair/hal/clocks"
 )
 
-// ConfigureWatchdog enables the watchdog peripheral, which resets the device if
-// a timer is not reset ("fed") for a defined amount of time.
-func ConfigureWatchdog() {
-	clocks.ConfigureWatchdogClock()
+// Configure enables the watchdog peripheral, which resets the device if timer
+// is not reset ("fed") for a defined amount of time.
+func Configure() {
+	clocks.ConfigureWatchdog()
 
 	// power on the WDT peripheral
 	sam.PM.APBAMASK.SetBits(sam.PM_APBAMASK_WDT_)
@@ -28,7 +28,7 @@ func ConfigureWatchdog() {
 	}
 }
 
-// FeedWatchdog resets a watchdog timer, to indicate the app is healthy.
-func FeedWatchdog() {
+// Feed resets a watchdog timer, to indicate the app is healthy.
+func Feed() {
 	sam.WDT.CLEAR.Set(sam.WDT_CLEAR_CLEAR_KEY) // other values reset the CPU immediately
 }

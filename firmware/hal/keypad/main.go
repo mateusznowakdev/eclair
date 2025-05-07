@@ -66,9 +66,8 @@ type Keypad struct {
 	e1    *Event
 }
 
-// NewKeypad creates a new Keypad instance, and configures input and output pins
-// of a keyboard matrix.
-func NewKeypad() Keypad {
+// New creates a new Keypad instance, and configures pins of a keyboard matrix.
+func New() Keypad {
 	cols := []machine.Pin{machine.KEYS_COL1_PIN, machine.KEYS_COL2_PIN, machine.KEYS_COL3_PIN, machine.KEYS_COL4_PIN, machine.KEYS_COL5_PIN}
 	rows := []machine.Pin{machine.KEYS_ROW1_PIN, machine.KEYS_ROW2_PIN, machine.KEYS_ROW3_PIN}
 

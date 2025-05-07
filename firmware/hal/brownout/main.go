@@ -2,10 +2,10 @@ package brownout
 
 import "device/sam"
 
-// ConfigureBOD33 enables the brown-out detector, which resets the device on a
+// Configure enables the brown-out detector, which resets the device on a
 // significant voltage drop on a 3.3V bus, preventing system failures such as
 // invalid flash memory operations.
-func ConfigureBOD33() {
+func Configure() {
 	// disable peripheral
 	sam.SYSCTRL.BOD33.ClearBits(sam.SYSCTRL_BOD33_ENABLE)
 	for !sam.SYSCTRL.PCLKSR.HasBits(sam.SYSCTRL_PCLKSR_B33SRDY) {

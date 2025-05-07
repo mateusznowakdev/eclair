@@ -14,9 +14,9 @@ type Battery struct {
 	good    bool
 }
 
-// NewBattery creates a new Battery instance and configures the underlying ADC
-// channel using 1V fixed reference voltage.
-func NewBattery() Battery {
+// New creates a new Battery instance and configures the underlying ADC channel
+// using 1V fixed reference voltage.
+func New() Battery {
 	machine.InitADC()
 
 	adc := machine.ADC{Pin: machine.VMETER_PIN}

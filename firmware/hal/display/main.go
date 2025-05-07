@@ -31,9 +31,9 @@ func newSPI() *machine.SPI {
 	return spi
 }
 
-// NewDisplay creates a new Display instance, configures a SERCOM bus in SPI
-// mode, and sends the initialization sequence to the display.
-func NewDisplay() Display {
+// New creates a new Display instance, configures a SERCOM bus in SPI mode, and
+// sends the initialization sequence to the display.
+func New() Display {
 	spi := newSPI()
 
 	device := ssd1306.NewSPI(spi, machine.DISP_DC_PIN, machine.DISP_RST_PIN, machine.DISP_CS_PIN)

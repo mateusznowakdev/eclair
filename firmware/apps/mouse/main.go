@@ -20,7 +20,7 @@ func Run() {
 
 	// - display -
 
-	disp := display.NewDisplay()
+	disp := display.New()
 
 	disp.ClearBuffer()
 	disp.DrawText([]byte("- mouse mode -"), 1, 10)
@@ -30,7 +30,7 @@ func Run() {
 
 	// - keypad -
 
-	keys := keypad.NewKeypad()
+	keys := keypad.New()
 
 	keys.SetHandlers([]func(keypad.EventType){
 		func(et keypad.EventType) {
@@ -93,7 +93,7 @@ func Run() {
 	// - main loop -
 
 	for {
-		watchdog.FeedWatchdog()
+		watchdog.Feed()
 		keys.Scan()
 
 		mouse.Mouse.Move(int(speedX), int(speedY))
