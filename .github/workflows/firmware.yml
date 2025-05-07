@@ -1,5 +1,6 @@
 name: Build UF2 firmware
 env:
+  TINYGO_ROOT: /usr/local/lib/tinygo
   TINYGO_VERSION: "0.37.0"
 on:
   push:
@@ -21,10 +22,16 @@ jobs:
           wget -nv https://github.com/tinygo-org/tinygo/releases/download/v${TINYGO_VERSION}/tinygo_${TINYGO_VERSION}_amd64.deb
           sudo apt-get install ./tinygo_${TINYGO_VERSION}_amd64.deb -y
           rm tinygo_${TINYGO_VERSION}_amd64.deb
+      - name: Add custom board definition
+        working-directory: firmware
+        run: |
+          sudo cp _board/board_eclair-m0.go ${TINYGO_ROOT}/src/machine/
+          sudo cp _board/eclair-m0.json ${TINYGO_ROOT}/targets/
+          sudo cp _board/eclair-m0.ld ${TINYGO_ROOT}/targets/
       - name: Build UF2 file
         working-directory: firmware
         run: |
-          tinygo build -target ./eclair.json -size full -o eclair-firmware-${GITHUB_REF_NAME}-$(date +%Y%m%d).uf2
+          tinygo build -target eclair-m0 -size full -o eclair-firmware-${GITHUB_REF_NAME}-$(date +%Y%m%d).uf2
       - name: Create draft release
         working-directory: firmware
         run: |
