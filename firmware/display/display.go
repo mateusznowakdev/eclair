@@ -1,7 +1,6 @@
 package display
 
 import (
-	"device/sam"
 	"machine"
 
 	"tinygo.org/x/drivers/ssd1306"
@@ -23,11 +22,11 @@ type Display struct {
 	inverted bool
 }
 
-func newSPI() machine.SPI {
+func newSPI() *machine.SPI {
 	frequency := uint32(peripherals.PatchedGCLK0Frequency(8_000_000))
 
-	spi := machine.SPI{Bus: sam.SERCOM0_SPI, SERCOM: 0}
-	_ = spi.Configure(machine.SPIConfig{SCK: machine.PA09, SDO: machine.PA11, SDI: machine.PA08, Frequency: frequency})
+	spi := machine.SPI0
+	_ = spi.Configure(machine.SPIConfig{Frequency: frequency})
 
 	return spi
 }
@@ -37,7 +36,7 @@ func newSPI() machine.SPI {
 func NewDisplay() Display {
 	spi := newSPI()
 
-	device := ssd1306.NewSPI(&spi /* DC: */, machine.PA07 /* RST: */, machine.PA06 /* CS: */, machine.PA05)
+	device := ssd1306.NewSPI(spi, machine.DISP_DC_PIN, machine.DISP_RST_PIN, machine.DISP_CS_PIN)
 	device.Configure(ssd1306.Config{Width: displayWidth, Height: displayHeight})
 
 	// reduce device brightness and allow for wider brightness range

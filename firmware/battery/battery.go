@@ -19,7 +19,7 @@ type Battery struct {
 func NewBattery() Battery {
 	machine.InitADC()
 
-	adc := machine.ADC{Pin: machine.PA02}
+	adc := machine.ADC{Pin: machine.VMETER_PIN}
 	adc.Configure(machine.ADCConfig{})
 
 	sam.ADC.INPUTCTRL.ReplaceBits(sam.ADC_INPUTCTRL_GAIN_1X, 0xF, sam.ADC_INPUTCTRL_GAIN_Pos)

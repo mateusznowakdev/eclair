@@ -1,0 +1,11 @@
+{
+  "inherits": ["atsamd21e18a"],
+  "build-tags": ["eclair_m0"],
+  "linkerscript": "targets/eclair-m0.ld",
+  "serial": "usb",
+  "serial-port": ["1209:EC1A"],
+  "flash-1200-bps-reset": "true",
+  "flash-method": "msd",
+  "msd-volume-name": ["ECLAIRBOOT", "TRINKETBOOT"],
+  "msd-firmware-name": "firmware.uf2"
+}

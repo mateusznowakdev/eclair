@@ -1,5 +1,0 @@
-{
-  "inherits": ["trinket-m0"],
-  "linkerscript": "eclair.ld",
-  "msd-volume-name": ["ECLAIRBOOT"]
-}

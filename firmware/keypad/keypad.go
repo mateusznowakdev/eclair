@@ -69,8 +69,8 @@ type Keypad struct {
 // NewKeypad creates a new Keypad instance, and configures input and output pins
 // of a keyboard matrix.
 func NewKeypad() Keypad {
-	rows := []machine.Pin{machine.PA04, machine.PA28, machine.PA16}
-	cols := []machine.Pin{machine.PA23, machine.PA22, machine.PA19, machine.PA18, machine.PA01}
+	cols := []machine.Pin{machine.KEYS_COL1_PIN, machine.KEYS_COL2_PIN, machine.KEYS_COL3_PIN, machine.KEYS_COL4_PIN, machine.KEYS_COL5_PIN}
+	rows := []machine.Pin{machine.KEYS_ROW1_PIN, machine.KEYS_ROW2_PIN, machine.KEYS_ROW3_PIN}
 
 	for _, row := range rows {
 		row.Configure(machine.PinConfig{Mode: machine.PinInput})
