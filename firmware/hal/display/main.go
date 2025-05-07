@@ -3,9 +3,9 @@ package display
 import (
 	"machine"
 
-	"tinygo.org/x/drivers/ssd1306"
+	"eclair/hal/clocks"
 
-	"eclair/peripherals"
+	"tinygo.org/x/drivers/ssd1306"
 )
 
 const displayWidth = 128
@@ -23,7 +23,7 @@ type Display struct {
 }
 
 func newSPI() *machine.SPI {
-	frequency := uint32(peripherals.PatchedGCLK0Frequency(8_000_000))
+	frequency := uint32(clocks.PatchedGCLK0Frequency(8_000_000))
 
 	spi := machine.SPI0
 	_ = spi.Configure(machine.SPIConfig{Frequency: frequency})

@@ -1,4 +1,4 @@
-package peripherals
+package brownout
 
 import "device/sam"
 

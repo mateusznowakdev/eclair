@@ -1,4 +1,4 @@
-package peripherals
+package reset
 
 import (
 	"device/sam"

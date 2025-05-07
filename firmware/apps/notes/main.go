@@ -4,10 +4,11 @@ import (
 	"machine/usb/hid/keyboard"
 	"slices"
 
-	"eclair/battery"
-	"eclair/display"
-	"eclair/keypad"
-	"eclair/peripherals"
+	"eclair/hal/battery"
+	"eclair/hal/display"
+	"eclair/hal/keypad"
+	"eclair/hal/reset"
+	"eclair/hal/watchdog"
 )
 
 func deleteLine(note *Note) {
@@ -122,10 +123,10 @@ func refreshDisplay(disp display.Display, batt battery.Battery, note Note) {
 func saveAndExit(note *Note) {
 	_, err := note.write()
 	if err != nil {
-		peripherals.Lock()
+		reset.Lock()
 	}
 
-	peripherals.SoftReset()
+	reset.SoftReset()
 }
 
 func sendToPC(note *Note) {
@@ -137,7 +138,7 @@ func Run() {
 
 	_, err := note.read()
 	if err != nil {
-		peripherals.Lock()
+		reset.Lock()
 	}
 
 	// - display -
@@ -203,11 +204,11 @@ func Run() {
 	refreshDisplay(disp, batt, note)
 
 	for {
-		peripherals.FeedWatchdog()
+		watchdog.FeedWatchdog()
 
 		changed, err := note.writeDelayed()
 		if err != nil {
-			peripherals.Lock()
+			reset.Lock()
 		}
 
 		changed = changed || keys.Scan()

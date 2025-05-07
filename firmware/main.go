@@ -3,16 +3,19 @@ package main
 import (
 	"eclair/apps/launcher"
 	"eclair/apps/notes"
-	"eclair/peripherals"
+	"eclair/hal/brownout"
+	"eclair/hal/clocks"
+	"eclair/hal/reset"
+	"eclair/hal/watchdog"
 )
 
 func main() {
-	peripherals.ConfigureBOD33()
-	peripherals.ConfigureWatchdog()
-	peripherals.ConfigureCPUClock()
-	peripherals.ConfigureUSBClock()
+	brownout.ConfigureBOD33()
+	watchdog.ConfigureWatchdog()
+	clocks.ConfigureCPUClock()
+	clocks.ConfigureUSBClock()
 
-	if peripherals.IsSoftReset() {
+	if reset.IsSoftReset() {
 		launcher.Run()
 	} else {
 		notes.Run()

@@ -1,9 +1,10 @@
 package flashlight
 
 import (
-	"eclair/display"
-	"eclair/keypad"
-	"eclair/peripherals"
+	"eclair/hal/display"
+	"eclair/hal/keypad"
+	"eclair/hal/reset"
+	"eclair/hal/watchdog"
 )
 
 func Run() {
@@ -34,7 +35,7 @@ func Run() {
 	keys.SetHandlers([]func(keypad.EventType){
 		func(et keypad.EventType) {
 			if et.Alt() && et.Released() {
-				peripherals.SoftReset()
+				reset.SoftReset()
 			}
 			handler(et)
 		},
@@ -57,7 +58,7 @@ func Run() {
 	// - main loop -
 
 	for {
-		peripherals.FeedWatchdog()
+		watchdog.FeedWatchdog()
 		keys.Scan()
 	}
 }

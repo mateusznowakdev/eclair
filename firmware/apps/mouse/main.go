@@ -5,9 +5,10 @@ import (
 	"math"
 	"time"
 
-	"eclair/display"
-	"eclair/keypad"
-	"eclair/peripherals"
+	"eclair/hal/display"
+	"eclair/hal/keypad"
+	"eclair/hal/reset"
+	"eclair/hal/watchdog"
 )
 
 const acceleration = 1.1
@@ -34,7 +35,7 @@ func Run() {
 	keys.SetHandlers([]func(keypad.EventType){
 		func(et keypad.EventType) {
 			if et.Alt() && et.Released() {
-				peripherals.SoftReset()
+				reset.SoftReset()
 			}
 		},
 		nil,
@@ -92,7 +93,7 @@ func Run() {
 	// - main loop -
 
 	for {
-		peripherals.FeedWatchdog()
+		watchdog.FeedWatchdog()
 		keys.Scan()
 
 		mouse.Mouse.Move(int(speedX), int(speedY))

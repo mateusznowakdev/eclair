@@ -3,9 +3,9 @@ package launcher
 import (
 	"time"
 
-	"eclair/display"
-	"eclair/keypad"
-	"eclair/peripherals"
+	"eclair/hal/display"
+	"eclair/hal/keypad"
+	"eclair/hal/watchdog"
 )
 
 type Entry struct {
@@ -89,7 +89,7 @@ func Run() {
 	refreshDisplay(disp, pos)
 
 	for {
-		peripherals.FeedWatchdog()
+		watchdog.FeedWatchdog()
 		keys.Scan()
 	}
 }
