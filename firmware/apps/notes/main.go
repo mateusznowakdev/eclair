@@ -107,9 +107,9 @@ func refreshDisplay(disp display.Display, batt battery.Battery, note Note) {
 	disp.DrawMultiText(note.file.Data, note.cursor)
 
 	if note.dirty() {
-		disp.DrawSprite(icons["file"], 0, 0)
+		disp.DrawSprite(icons[iconFile], 0, 0)
 	} else if !batt.Good() {
-		disp.DrawSprite(icons["battery"], 0, 0)
+		disp.DrawSprite(icons[iconBattery], 0, 0)
 	}
 
 	disp.Display()

@@ -1,6 +1,12 @@
+import sys
+
+if len(sys.argv) != 3:
+    print("usage: source.pbm source.txt", file=sys.stderr)
+    sys.exit(1)
+
 # get and process glyph data
 
-with open("font.pbm", "rt") as glyph_file:
+with open(sys.argv[1], "rt") as glyph_file:
     lines = glyph_file.readlines()
 
 assert lines[0].strip() == "P1"
@@ -26,7 +32,7 @@ for line in lines[2:]:
 
 # get glyph widths
 
-with open("font.txt", "rt") as metadata_file:
+with open(sys.argv[2], "rt") as metadata_file:
     g_widths = [int(w) for w in metadata_file.read().splitlines()]
 
 # build Go data

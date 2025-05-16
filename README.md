@@ -19,15 +19,17 @@ Install the TinyGo SDK. Copy EclairM0 board definition files as follows:
 Now you should be able to build and upload new firmware, like this:
 
 ```bash
+cd firmware
 tinygo flash -target eclair-m0 -size short
 ```
 
 ## Updating font data
 
-Font data is stored in the `tools/font.pbm` image file, with `tools/font.txt` containing font widths. The image file can be edited in GIMP.
+Font data is stored in the `tools/newstroke.pbm` image file, with `tools/newstroke.txt` containing font widths. The image file can be edited in GIMP.
 
 These source files can be converted into a working Go code, using the `tools/convert.py` script, which should work with any modern version of Python:
 
 ```bash
-python convert.py > ../firmware/hal/display/font.go
+cd tools
+python convert.py newstroke.pbm newstroke.txt > ../firmware/hal/display/font.go
 ```
