@@ -8,8 +8,8 @@ import (
 	"tinygo.org/x/drivers/ssd1306"
 )
 
-const displayWidth = 128
-const displayHeight = 32
+const Width = 128
+const Height = 32
 
 const ContrastHigh = 255
 const ContrastNormal = 63
@@ -37,7 +37,7 @@ func New() Display {
 	spi := newSPI()
 
 	device := ssd1306.NewSPI(spi, machine.DISP_DC_PIN, machine.DISP_RST_PIN, machine.DISP_CS_PIN)
-	device.Configure(ssd1306.Config{Width: displayWidth, Height: displayHeight})
+	device.Configure(ssd1306.Config{Width: Width, Height: Height})
 
 	// reduce device brightness and allow for wider brightness range
 	device.Command(ssd1306.SETPRECHARGE)

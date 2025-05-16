@@ -2,7 +2,7 @@ package display
 
 const cursorData = 0x5555
 
-const maxSpriteLines = displayHeight / 8
+const maxSpriteLines = Height / 8
 const maxTextLines = maxSpriteLines - 1
 
 type Line struct {
@@ -12,7 +12,7 @@ type Line struct {
 
 func drawCursor(buffer []byte, bufferPos uint) {
 	buffer[bufferPos] = cursorData & 0xFF
-	buffer[bufferPos+displayWidth] = cursorData >> 8
+	buffer[bufferPos+Width] = cursorData >> 8
 }
 
 func drawSprite(sprite []uint8, buffer []byte, line uint, xOffset uint) {
@@ -20,10 +20,10 @@ func drawSprite(sprite []uint8, buffer []byte, line uint, xOffset uint) {
 		return
 	}
 
-	bufferStart := line * displayWidth
+	bufferStart := line * Width
 
 	for _, col := range sprite {
-		if xOffset >= displayWidth {
+		if xOffset >= Width {
 			break
 		}
 
@@ -37,13 +37,13 @@ func drawText(text []byte, cursor int, buffer []byte, line uint, xOffset uint) {
 		return
 	}
 
-	bufferStart := line * displayWidth
+	bufferStart := line * Width
 
 	for charNo, char := range text {
 		glyph := getGlyph(char)
 
 		for colNo, col := range glyph {
-			if xOffset >= displayWidth {
+			if xOffset >= Width {
 				break
 			}
 
@@ -52,7 +52,7 @@ func drawText(text []byte, cursor int, buffer []byte, line uint, xOffset uint) {
 			}
 
 			buffer[bufferStart+xOffset] = uint8(col >> 0)
-			buffer[bufferStart+xOffset+displayWidth] = uint8(col >> 8)
+			buffer[bufferStart+xOffset+Width] = uint8(col >> 8)
 
 			xOffset += 1
 		}
@@ -155,11 +155,11 @@ func GetLines(text []byte) []Line {
 		if text[charNo] == ' ' {
 			newLineLen := lineLen + wordLen
 
-			if brokeLongWord || newLineLen-glyphWidth > displayWidth {
+			if brokeLongWord || newLineLen-glyphWidth > Width {
 				lineLen = wordLen
 				brokeLongWord = false
 				updateLines(wordStart, wordStart)
-			} else if newLineLen > displayWidth {
+			} else if newLineLen > Width {
 				lineLen = 0
 				updateLines(charNo, charNo+1)
 			} else {
@@ -171,7 +171,7 @@ func GetLines(text []byte) []Line {
 		}
 
 		// handle very long words
-		if wordLen > displayWidth {
+		if wordLen > Width {
 			if wordStart > 0 {
 				updateLines(wordStart, wordStart)
 			}
@@ -187,7 +187,7 @@ func GetLines(text []byte) []Line {
 
 	// handle last word
 	newLineLen := lineLen + wordLen
-	if brokeLongWord || newLineLen > displayWidth {
+	if brokeLongWord || newLineLen > Width {
 		updateLines(wordStart, wordStart)
 	}
 
