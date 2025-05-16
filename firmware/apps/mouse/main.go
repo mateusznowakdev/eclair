@@ -23,7 +23,7 @@ func Run() {
 	disp := display.New()
 
 	disp.ClearBuffer()
-	disp.DrawText([]byte("- mouse mode -"), 1, 10)
+	disp.DrawText([]byte("- mouse mode -"), 1, 2)
 	disp.Display()
 
 	disp.SetContrast(display.ContrastLow)

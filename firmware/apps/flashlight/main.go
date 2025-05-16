@@ -13,7 +13,7 @@ func Run() {
 	disp := display.New()
 
 	disp.ClearBuffer()
-	disp.DrawText([]byte("- hold any key -"), 1, 10)
+	disp.DrawText([]byte("- hold any key -"), 1, 0)
 	disp.Display()
 
 	disp.SetContrast(display.ContrastLow)

@@ -104,12 +104,7 @@ func prevLine(note *Note) {
 
 func refreshDisplay(disp display.Display, batt battery.Battery, note Note) {
 	disp.ClearBuffer()
-
-	if len(note.file.Data) > 0 {
-		disp.DrawMultiText(note.file.Data, note.cursor)
-	} else {
-		disp.DrawText([]byte("- start typing -"), 1, 10)
-	}
+	disp.DrawMultiText(note.file.Data, note.cursor)
 
 	if note.dirty() {
 		disp.DrawSprite(icons["file"], 0, 0)

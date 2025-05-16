@@ -38,7 +38,7 @@ print("var font = [][]uint16{")
 d = 0
 g = 32
 for width in g_widths:
-    print(f"/*  {chr(g)}  */ {{", end="")
+    print(f"/*  {chr(g)}  */ {{0x0000, ", end="")
     for n in data[d:d+width]:
         print(f"0x{n:04X}, ", end="")
     print(f"}},")

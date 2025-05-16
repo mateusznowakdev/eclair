@@ -1,6 +1,6 @@
 package display
 
-const cursorData = 0xAAAA
+const cursorData = 0x5555
 
 const maxSpriteLines = displayHeight / 8
 const maxTextLines = maxSpriteLines - 1
