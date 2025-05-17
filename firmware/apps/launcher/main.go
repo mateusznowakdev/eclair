@@ -27,12 +27,12 @@ func refreshDisplay(disp display.Display, pos int) {
 	disp.ClearBuffer()
 
 	opt := apps[pos]
-	disp.DrawText([]byte(">"), 0, 0)
-	disp.DrawText([]byte(opt.name), 0, 10)
+	disp.DrawText([]byte(opt.name), 0, 2)
+	disp.DrawTextFrame(0, 0, 126)
 
 	if pos < len(apps)-1 {
 		opt = apps[pos+1]
-		disp.DrawText([]byte(opt.name), 2, 10)
+		disp.DrawText([]byte(opt.name), 2, 2)
 	}
 
 	disp.Display()

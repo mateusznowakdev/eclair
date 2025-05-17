@@ -73,28 +73,15 @@ func drawTextFrame(buffer []byte, line uint, x1 uint, x2 uint) {
 
 	bufferStart := line * Width
 
-	// left
-	buffer[bufferStart+x1] = 0xAA
-	buffer[bufferStart+Width+x1] = 0xAA
-
-	// top
 	for x := x1; x <= min(x2, Width); x++ {
 		if x%2 != 0 {
-			buffer[bufferStart+x] |= 0x01
-		}
-	}
-
-	// bottom
-	for x := x1; x <= min(x2, Width); x++ {
-		if x%2 == 0 {
 			buffer[bufferStart+Width+x] |= 0x80
 		}
 	}
 
-	// right
+	buffer[bufferStart+Width+x1] = 0x50
 	if x2 < Width {
-		buffer[bufferStart+x2] = 0x55
-		buffer[bufferStart+Width+x2] = 0x55
+		buffer[bufferStart+Width+x2] = 0x50
 	}
 }
 

@@ -17,7 +17,7 @@ var chars = [][]byte{
 // slow down the main text renderer, so for now have this offset map instead
 var offs = [][]uint8{
 	{5, 5, 5, 5, 5, 3, 2, 2},
-	{2, 3, 5, 1, 3, 2, 2, 3},
+	{2, 3, 5, 1, 1, 2, 2, 3},
 	{2, 2, 3, 3, 4, 4, 3, 3},
 	{2, 3, 2, 3, 5, 2, 2, 3},
 }
@@ -29,7 +29,7 @@ func refreshDisplay(disp display.Display, posX int, posY int) {
 		disp.DrawText([]byte{chr}, 0, uint(chrNo)*16+uint(offs[posY][chrNo]))
 	}
 
-	disp.DrawTextFrame(0, uint(posX*16), uint(posX*16+15))
+	disp.DrawTextFrame(0, uint(posX*16), uint(posX*16+14))
 	disp.Display()
 }
 
