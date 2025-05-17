@@ -57,6 +57,14 @@ func (d *Display) ClearBuffer() {
 	d.device.ClearBuffer()
 }
 
+// ClearBufferTop clears the top half of display buffer.
+func (d *Display) ClearBufferTop() {
+	buffer := d.device.GetBuffer()
+	for i := 0; i < len(buffer)/2; i++ {
+		buffer[i] = 0
+	}
+}
+
 // ClearDisplay clears the display buffer and sends it to the display.
 func (d *Display) ClearDisplay() {
 	d.device.ClearDisplay()

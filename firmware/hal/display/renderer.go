@@ -52,7 +52,7 @@ func drawText(text []byte, cursor int, buffer []byte, line uint, xOffset uint) {
 			}
 
 			buffer[bufferStart+xOffset] = uint8(col >> 0)
-			buffer[bufferStart+xOffset+Width] = uint8(col >> 8)
+			buffer[bufferStart+Width+xOffset] = uint8(col >> 8)
 
 			xOffset += 1
 		}
@@ -63,6 +63,38 @@ func drawText(text []byte, cursor int, buffer []byte, line uint, xOffset uint) {
 			xOffset -= 1
 		}
 		drawCursor(buffer, bufferStart+xOffset)
+	}
+}
+
+func drawTextFrame(buffer []byte, line uint, x1 uint, x2 uint) {
+	if line >= maxTextLines {
+		return
+	}
+
+	bufferStart := line * Width
+
+	// left
+	buffer[bufferStart+x1] = 0xAA
+	buffer[bufferStart+Width+x1] = 0xAA
+
+	// top
+	for x := x1; x <= min(x2, Width); x++ {
+		if x%2 != 0 {
+			buffer[bufferStart+x] |= 0x01
+		}
+	}
+
+	// bottom
+	for x := x1; x <= min(x2, Width); x++ {
+		if x%2 == 0 {
+			buffer[bufferStart+Width+x] |= 0x80
+		}
+	}
+
+	// right
+	if x2 < Width {
+		buffer[bufferStart+x2] = 0x55
+		buffer[bufferStart+Width+x2] = 0x55
 	}
 }
 
@@ -124,6 +156,13 @@ func (d *Display) DrawSprite(sprite []uint8, line uint, xOffset uint) {
 // The line is a value between 0 (top) and 2 (bottom of the screen).
 func (d *Display) DrawText(text []byte, line uint, xOffset uint) {
 	drawText(text, -1, d.device.GetBuffer(), line, xOffset)
+}
+
+// DrawTextFrame adds a thin frame around text between X1 and X2 points.
+//
+// The line is a value between 0 (top) and 2 (bottom of the screen).
+func (d *Display) DrawTextFrame(line uint, x1 uint, x2 uint) {
+	drawTextFrame(d.device.GetBuffer(), line, x1, x2)
 }
 
 // GetLines splits the defined text into multiple lines and returns the starting

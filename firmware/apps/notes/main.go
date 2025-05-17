@@ -146,8 +146,6 @@ func upper(value byte, shift bool) byte {
 }
 
 func Run() {
-	// - application state -
-
 	shift := false
 
 	note := NewNote()
