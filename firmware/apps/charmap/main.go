@@ -22,7 +22,7 @@ var offs = [][]uint8{
 	{2, 3, 2, 3, 5, 2, 2, 3},
 }
 
-func refreshDisplay(disp display.Display, posX int, posY int) {
+func refreshDisplay(disp *display.Display, posX int, posY int) {
 	disp.ClearBufferTop()
 
 	for chrNo, chr := range chars[posY] {
@@ -43,13 +43,13 @@ func wrap(value int, min int, max int) int {
 	return value
 }
 
-func Run() {
+func Run(disp *display.Display) int {
 	posX := 0
 	posY := 0
 
-	// - display -
+	result := 0
 
-	disp := display.New()
+	// - using existing display instance to prevent it from being reset -
 
 	// - keypad -
 
@@ -87,7 +87,7 @@ func Run() {
 		},
 		func(et keypad.EventType) {
 			if et.Released() {
-				print("pressed ", string(chars[posY][posX]), "\r\n")
+				result = int(chars[posY][posX])
 			}
 		},
 		nil,
@@ -101,8 +101,10 @@ func Run() {
 
 	refreshDisplay(disp, posX, posY)
 
-	for {
+	for result == 0 {
 		watchdog.Feed()
 		keys.Scan()
 	}
+
+	return result
 }

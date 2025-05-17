@@ -4,6 +4,7 @@ import (
 	"machine/usb/hid/keyboard"
 	"slices"
 
+	"eclair/apps/charmap"
 	"eclair/hal/battery"
 	"eclair/hal/display"
 	"eclair/hal/keypad"
@@ -75,6 +76,13 @@ func handler(note *Note, shift bool, et keypad.EventType, alt func(), opts ...by
 	}
 
 	return false
+}
+
+func insertChar(note *Note, disp *display.Display) {
+	result := charmap.Run(disp)
+	if result != 0 {
+		note.insert(byte(result))
+	}
 }
 
 func nextLine(note *Note) {
@@ -173,7 +181,7 @@ func Run() {
 			return handler(&note, shift, et, func() { prevLine(&note) }, 't', 'y', '3')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, nil, 'u', 'i', '4')
+			return handler(&note, shift, et, func() { insertChar(&note, &disp) }, 'u', 'i', '4')
 		},
 		func(et keypad.EventType) bool {
 			return handler(&note, shift, et, func() { note.delete() }, 'o', 'p', '5')
