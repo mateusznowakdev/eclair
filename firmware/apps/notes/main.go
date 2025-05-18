@@ -3,6 +3,7 @@ package notes
 import (
 	"machine/usb/hid/keyboard"
 	"slices"
+	"time"
 
 	"eclair/apps/charmap"
 	"eclair/hal/battery"
@@ -143,7 +144,17 @@ func saveAndExit(note *Note) {
 }
 
 func sendToPC(note *Note) {
-	_, _ = keyboard.Keyboard.Write(note.file.Data)
+	for _, char := range note.file.Data {
+		keys := keymap[char-32]
+		for _, key := range keys {
+			keyboard.Keyboard.Down(key)
+			time.Sleep(10 * time.Millisecond)
+		}
+		for _, key := range slices.Backward(keys) {
+			keyboard.Keyboard.Up(key)
+			time.Sleep(10 * time.Millisecond)
+		}
+	}
 }
 
 func upper(value byte, shift bool) byte {

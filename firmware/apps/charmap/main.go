@@ -25,8 +25,8 @@ var offs = [][]uint8{
 func refreshDisplay(disp *display.Display, posX int, posY int) {
 	disp.ClearBufferTop()
 
-	for chrNo, chr := range chars[posY] {
-		disp.DrawText([]byte{chr}, 0, uint(chrNo)*16+uint(offs[posY][chrNo]))
+	for charNo, char := range chars[posY] {
+		disp.DrawText([]byte{char}, 0, uint(charNo)*16+uint(offs[posY][charNo]))
 	}
 
 	disp.DrawTextFrame(0, uint(posX*16), uint(posX*16+14))
