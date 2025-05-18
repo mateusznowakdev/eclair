@@ -11,6 +11,7 @@ var chars = [][]byte{
 	{'=', '?', '!', '@', '#', '$', '%', '^'},
 	{'&', '*', '(', ')', '[', ']', '<', '>'},
 	{'{', '}', '\\', '/', '|', '_', '~', '`'},
+	{0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87},
 }
 
 // there is no support for horizontal text centering, and having one would
@@ -20,6 +21,7 @@ var offs = [][]uint8{
 	{2, 3, 5, 1, 1, 2, 2, 3},
 	{2, 2, 3, 3, 4, 4, 3, 3},
 	{2, 3, 2, 3, 5, 2, 2, 3},
+	{0, 0, 0, 0, 0, 0, 0, 0},
 }
 
 func refreshDisplay(disp *display.Display, posX int, posY int) {

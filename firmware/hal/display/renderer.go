@@ -86,17 +86,15 @@ func drawTextFrame(buffer []byte, line uint, x1 uint, x2 uint) {
 }
 
 func getGlyph(char byte) []uint16 {
-	char = char & 0x7F
+	first := 0x20
+	missing := 0x7F
 
-	if char < 32 {
-		return font[len(font)-1]
+	idx := int(char) - first
+	if idx < 0 || idx >= len(font) {
+		idx = missing - first
 	}
 
-	glyph := font[char-32]
-	if glyph == nil {
-		return font[len(font)-1]
-	}
-
+	glyph := font[idx]
 	return glyph
 }
 

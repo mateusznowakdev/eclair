@@ -26,7 +26,7 @@ func newSPI() *machine.SPI {
 	frequency := uint32(clocks.PatchedGCLK0Frequency(8_000_000))
 
 	spi := machine.SPI0
-	_ = spi.Configure(machine.SPIConfig{Frequency: frequency})
+	spi.Configure(machine.SPIConfig{Frequency: frequency})
 
 	return spi
 }
@@ -77,7 +77,7 @@ func (d *Display) Contrast() uint8 {
 
 // Display sends the buffer data to the display.
 func (d *Display) Display() {
-	_ = d.device.Display()
+	d.device.Display()
 }
 
 // Inverted returns the current invert state.

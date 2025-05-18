@@ -102,4 +102,12 @@ var keymap = [][]keyboard.Keycode{
 	/*  }  */ {Shift, keyboard.KeyRightBrace},
 	/*  ~  */ {Shift, keyboard.KeyTilde},
 	/* DEL */ nil,
+	/*     */ {keyboard.KeyLeft},
+	/*     */ {keyboard.KeyDown},
+	/*     */ {keyboard.KeyUp},
+	/*     */ {keyboard.KeyRight},
+	/*     */ {keyboard.KeyEnter},
+	/*     */ {keyboard.KeyBackspace},
+	/*     */ {keyboard.KeyTab},
+	/*     */ {keyboard.KeyEsc},
 }
