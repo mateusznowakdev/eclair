@@ -137,7 +137,7 @@ func refreshDisplay(disp display.Display, batt battery.Battery, note Note, shift
 func saveAndExit(note *Note) {
 	_, err := note.write()
 	if err != nil {
-		reset.Lock()
+		panic(err)
 	}
 
 	reset.SoftReset()
@@ -170,7 +170,7 @@ func Run() {
 	note := NewNote()
 	_, err := note.read()
 	if err != nil {
-		reset.Lock()
+		panic(err)
 	}
 
 	// - display -
@@ -240,7 +240,7 @@ func Run() {
 
 		changed, err := note.writeDelayed()
 		if err != nil {
-			reset.Lock()
+			panic(err)
 		}
 
 		changed = changed || keys.Scan()

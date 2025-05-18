@@ -12,13 +12,6 @@ func IsSoftReset() bool {
 	return sam.PM.GetRCAUSE_SYST() != 0
 }
 
-// Lock waits for a watchdog to reset the device.
-func Lock() {
-	//goland:noinspection ALL
-	for {
-	}
-}
-
 // SoftReset performs a CPU reset, after a slight delay for user experience
 // reasons.
 func SoftReset() {
