@@ -79,9 +79,9 @@ func handler(note *Note, shift bool, et keypad.EventType, alt func(), opts ...by
 	return false
 }
 
-func insertChar(note *Note, disp *display.Display) {
+func insertExtra(note *Note, disp *display.Display) {
 	result := charmap.Run(disp)
-	if result != 0 {
+	if result > 0 {
 		note.insert(byte(result))
 	}
 }
@@ -192,7 +192,7 @@ func Run() {
 			return handler(&note, shift, et, func() { prevLine(&note) }, 't', 'y', '3')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, func() { insertChar(&note, &disp) }, 'u', 'i', '4')
+			return handler(&note, shift, et, func() { insertExtra(&note, &disp) }, 'u', 'i', '4')
 		},
 		func(et keypad.EventType) bool {
 			return handler(&note, shift, et, func() { note.delete() }, 'o', 'p', '5')

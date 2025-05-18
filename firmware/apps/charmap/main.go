@@ -58,7 +58,11 @@ func Run(disp *display.Display) int {
 	keys := keypad.New()
 
 	keys.SetHandlers([]func(keypad.EventType){
-		nil,
+		func(et keypad.EventType) {
+			if et.Alt() && et.Released() {
+				result = -1
+			}
+		},
 		nil,
 		func(et keypad.EventType) {
 			if et.Released() {
