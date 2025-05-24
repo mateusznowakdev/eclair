@@ -39,21 +39,24 @@ python convert.py newstroke.pbm newstroke.txt > ../firmware/hal/display/font.go
 
 ## 3D-printing the enclosure
 
-Creality Ender-3 V3 KE is my 3D printer. I'm using OrcaSlicer 2.2.0 and at this point I'm too scared to update :)
+Creality Ender-3 V3 KE is my 3D printer. I'm using OrcaSlicer 2.2.0, and at this point I'm too scared to update :)
 
 These are the printing settings recommended by me:
 
-- Global filament settings &rarr; 215&deg;C nozzle, 60&deg;C bed
-  - give the bed extra time to actually warm up
+- Global filament settings (PLA) &rarr; 215&deg;C nozzle, 60&deg;C bed
 - "0.12mm Fine" base preset
 - Quality &rarr; Seam position: BACK
 - Quality &rarr; Scarf joint seam: CONTOUR
+- Quality &rarr; Elephant foot compensation: 0.15mm (depends on printer calibration, default is 0.05mm)
 - Quality &rarr; Precise wall: ON
 - Quality &rarr; Walls printing order: INNER/OUTER
 - Quality &rarr; Detect overhang walls: OFF
 - Strength &rarr; Bottom surface pattern: ARCHIMEDEAN or HILBERT for best appearance
 - Speed &rarr; First layer: 20mm/s (default is 50mm/s and it's too fast)
-- Based on calibration results, the very center of the heatbed may not give the best results
+
+Supports should not be necessary for the bridge under the slide switch cutout.
+
+I'm printing the parts face down, with the USB cutout pointing to the right. Based on the printer calibration, the very center of the heatbed may not give the best results.
 
 ## Engraving button labels
 
