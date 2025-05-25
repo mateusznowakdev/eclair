@@ -47,16 +47,17 @@ These are the printing settings recommended by me:
 - "0.12mm Fine" base preset
 - Quality &rarr; Seam position: BACK
 - Quality &rarr; Scarf joint seam: CONTOUR
-- Quality &rarr; Elephant foot compensation: 0.15mm (depends on printer calibration, default is 0.05mm)
+- Quality &rarr; Elephant foot compensation: 0.15mm (depends on the printer calibration, default is 0.05mm)
 - Quality &rarr; Precise wall: ON
 - Quality &rarr; Walls printing order: INNER/OUTER
 - Quality &rarr; Detect overhang walls: OFF
 - Strength &rarr; Bottom surface pattern: ARCHIMEDEAN or HILBERT for best appearance
 - Speed &rarr; First layer: 20mm/s (default is 50mm/s and it's too fast)
+- Speed &rarr; Top surface: 100mm/s (default is 250mm/s)
 
 Supports should not be necessary for the bridge under the slide switch cutout.
 
-I'm printing the parts face down, with the USB cutout pointing to the right. Based on the printer calibration, the very center of the heatbed may not give the best results.
+I'm printing the parts face down, with the USB cutout pointing to the right. The very center of the heatbed may not give the best results.
 
 ## Engraving button labels
 

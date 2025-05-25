@@ -3,61 +3,58 @@ use<_base.scad>
 $fn = 25;
 
 // board dimensions
-pX = 44.45;
-pY = 34.93;
+bx = 44.45;
+by = 34.93;
 
 // wall thickness
-tX = 2.0;
-tY = 1.5;
-tZ = 1.0;
+wlr = 2.0; // left-right
+wtb = 1.0; // top-bottom
+wfr = 0.8; // front-rear
 
-// tolerance/clearance
-c = 0.25;
+// tolerance
+tol = 0.15;
 
-// total height
-z = 3.25 + tZ;
-
-module mBase() {
-  x = pX + 2 * tX;
-  y = pY + 2 * tY;
-  r = 3.5;
-
-  translate([-tX, -tY])
-    linear_extrude(tZ)
-      rsquare([x, y], r);
+module Base() {
+  translate([0, 0, -wfr])
+    linear_extrude(wfr)
+      rsquare([bx+2*wlr+2*tol, by+2*wtb+2*tol], r=3, center=true);
 }
 
-module mSnaps() {
-  snaps = [
-    // clockwise
-    [[0, 0, -90], (pX-22)/2, pY],
-    [[0, 0, -90], (pX+22)/2, pY],
-    [[0, 0, 180], pX,        pY*1/2],
-    [[0, 0, 180], pX,        pY*1/10],
-    [[0, 0, 90],  (pX+22)/2, 0],
-    [[0, 0, 90],  (pX-22)/2, 0],
-    [[0, 0, 0],   0,         pY*1/10],
-    [[0, 0, 0],   0,         pY*1/2],
+module Supports() {
+  sx = 2.5;
+  sy = 1;
+
+  supports = [
+    [[     -11.4,  by/2-sy/2], 0],
+    [[      11.4,  by/2-sy/2], 0],
+    [[-bx/2+sy/2,        3.5], 270],
+    [[         0,        3.5], 270],
+    [[ bx/2-sy/2,        3.5], 90],
+    [[-bx/2+sy/2,       -5.5], 270],
+    [[ bx/2-sy/2,       -5.5], 90],
+    [[-bx/2+sy/2,      -14.0], 270],
+    [[ bx/2-sy/2,      -14.0], 90],
+    [[     -11.4, -by/2+sy/2], 180],
+    [[       0.0, -by/2+sy/2], 180],
+    [[      11.4, -by/2+sy/2], 180],
   ];
 
-  for (s = snaps) {
-    translate([s[1], s[2], tZ])
-      rotate(s[0])
-        mSnap();
-  }
+  for (s = supports)
+    linear_extrude(3.3)
+      translate(s[0])
+        rotate([0, 0, s[1]])
+          square([sx, sy], center=true);
 }
 
-module mSnap() {
-  d = 0.5;
-  l = 3;
-  h = 2.5;
+Base();
+Supports();
 
-  rotate([90, 0, 0])
-    linear_extrude(l, center=true)
-      polygon([[0, 0], [tZ, 0], [tZ, h+d+c], [0, h+d+c], [0, h+d], [-d, h], [0, h-d]]);
-}
-
-union() {
-  mBase();
-  mSnaps();
-}
+//module mSnap() {
+//  d = 0.5;
+//  l = 3;
+//  h = 2.5;
+//
+//  rotate([90, 0, 0])
+//    linear_extrude(l, center=true)
+//      polygon([[0, 0], [tZ, 0], [tZ, h+d+c], [0, h+d+c], [0, h+d], [-d, h], [0, h-d]]);
+//}

@@ -14,11 +14,11 @@ wfr = 0.8; // front-rear
 // tolerance
 tol = 0.15;
 
-// total height:
+// total height + 0.2mm for soldering inaccuracies:
 // - buttons: 1.8mm
 // -     PCB: 0.8mm
 // -   USB-C: 3.2mm
-z = 5.8;
+z = 6;
 
 module Base() {
   translate([0, 0, -z])
@@ -33,37 +33,38 @@ module Extrude() {
 }
 
 module ExtrudeSlideSwitch() {
-  translate([-bx/2-0.5-tol, by/4, -z])
+  // see CutoutSlideSwitch() for math info
+  translate([-bx/2-0.5-tol, (12+10.5)/2, -z])
     linear_extrude(z)
-      square([1, by/2-3+2*tol], center=true); // does not need to be that large, but is easier to understand
+      square([1, 9+4*tol], center=true);
 }
 
 module CutoutDisplay() {
   translate([0, 12])
-    linear_extrude(wfr)
+    linear_extrude(wfr+0.001) // prevent rendering issues
       rsquare([25, 8], r=1, center=true);
 }
 
 module CutoutButtons() {
   buttons = [
-    [-2,    0],
-    [-1,    0],
-    [ 0,    0],
-    [ 1,    0],
-    [ 2,    0],
-    [-2,   -1],
-    [-1,   -1],
-    [ 0,   -1],
-    [ 1,   -1],
-    [ 2,   -1],
-    [-1.5, -2],
-    [-0.5, -2],
-    [ 0.5, -2],
-    [ 1.5, -2],
+    [-2.0,  0.0],
+    [-1.0,  0.0],
+    [ 0.0,  0.0],
+    [ 1.0,  0.0],
+    [ 2.0,  0.0],
+    [-2.0, -1.0],
+    [-1.0, -1.0],
+    [ 0.0, -1.0],
+    [ 1.0, -1.0],
+    [ 2.0, -1.0],
+    [-1.5, -2.0],
+    [-0.5, -2.0],
+    [ 0.5, -2.0],
+    [ 1.5, -2.0],
   ];
 
   translate([0, 1.6])
-    linear_extrude(wfr)
+    linear_extrude(wfr+0.001)
       for (b = buttons)
         translate([b[0]*8.89, b[1]*7.62])
           circle(2);
@@ -82,9 +83,9 @@ module CutoutUSB() {
   w = 8.89;
   h = 3.2;
 
-  translate([-w/2, by/2+tol, -z+h])
+  translate([-w/2, by/2+tol-0.001, -z+h])
     rotate([-90, 0, 0])
-      linear_extrude(wtb)
+      linear_extrude(wtb+0.001)
         square([w, h]);
 }
 
@@ -112,8 +113,8 @@ module Supports() {
     [ bx/2-2+tol,        middle], // middle right
   ];
 
-  translate([0, 0, -1.8])
-    linear_extrude(1.8)
+  translate([0, 0, -1.9])
+    linear_extrude(1.9)
       for (s = supports)
         translate([s[0], s[1], -1.8])
           square([4, 1], center=true);
