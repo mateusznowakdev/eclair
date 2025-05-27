@@ -102,7 +102,7 @@ module CutoutCharm() {
 
 module Supports() {
   middle = 1.6-7.62/2; // Y dimension between buttons, see CutoutButtons()
-    
+
   supports = [
     [-bx/2+2-tol,  by/2-0.5+tol], // top left
     [ bx/2-2+tol,  by/2-0.5+tol], // top right
@@ -120,6 +120,33 @@ module Supports() {
           square([4, 1], center=true);
 }
 
+module SnapHoles() {
+  // almost the same as Snaps() in bottom.scad
+  sx = 3; // wider than a snap
+  sy = 1;
+  sz = 3.3;
+
+  snaps = [
+    [[-11.4,  by/2], 90],
+    [[ 11.4,  by/2], 90],
+    [[ bx/2,   3.5], 0],
+    [[ bx/2,  -5.5], 0],
+    [[ 11.4, -by/2], 270],
+    [[-11.4, -by/2], 270],
+    [[-bx/2,  -5.5], 180],
+    [[-bx/2,   3.5], 180],
+  ];
+
+  for (s = snaps)
+    translate(s[0])
+      rotate([0, 0, s[1]])
+        // single snap hole
+        translate([tol, sx/2, -z]) // extra tolerance to make hole deeper
+          rotate([90, 0, 0])
+            linear_extrude(sx)
+              polygon([[0, sz], [0.5, sz-0.5], [0, sz-1.0]]);
+}
+
 difference() {
   Base();
   difference() {
@@ -132,35 +159,5 @@ difference() {
   CutoutSlideSwitch();
   CutoutUSB();
   CutoutCharm();
+  SnapHoles();
 }
-
-// module mSnapHoles() {
-//   oZ = 2.5;
-//
-//   holes = [
-//     // clockwise
-//     [[0, 180, 90], (pX-22)/2, pY],
-//     [[0, 180, 90], (pX+22)/2, pY],
-//     [[0, 180, 0],  pX,        pY*1/2],
-//     [[0, 180, 0],  pX,        pY*1/10],
-//     [[0, 0, 90],   (pX+22)/2, 0],
-//     [[0, 0, 90],   (pX-22)/2, 0],
-//     [[0, 0, 0],    0,         pY*1/10],
-//     [[0, 0, 0],    0,         pY*1/2],
-//   ];
-//
-//   for (h = holes) {
-//     translate([h[1], h[2], -z+oZ])
-//       rotate(h[0])
-//         mSnapHole();
-//   }
-// }
-//
-// module mSnapHole() {
-//   d = 0.5 + c;
-//   l = 3 + 2 * c;
-//
-//   rotate([-90, 0, 0])
-//     linear_extrude(l, center=true)
-//       polygon([[-d, 0], [0, d], [0, -d]]);
-// }
