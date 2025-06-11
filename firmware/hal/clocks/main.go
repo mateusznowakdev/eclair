@@ -27,17 +27,6 @@ func ConfigureUSB() {
 	sam.GCLK.CLKCTRL.Set(sam.GCLK_CLKCTRL_ID_USB | (sam.GCLK_CLKCTRL_GEN_GCLK5 << sam.GCLK_CLKCTRL_GEN_Pos) | sam.GCLK_CLKCTRL_CLKEN)
 }
 
-// ConfigureWatchdog enables the GCLK8 clock at 1MHz and assigns it to the
-// watchdog peripheral.
-func ConfigureWatchdog() {
-	sam.GCLK.GENDIV.Set(8 | (32 << sam.GCLK_GENDIV_DIV_Pos))
-	sam.GCLK.GENCTRL.Set(8 | (sam.GCLK_GENCTRL_SRC_OSCULP32K << sam.GCLK_GENCTRL_SRC_Pos) | sam.GCLK_GENCTRL_GENEN)
-	for sam.GCLK.STATUS.HasBits(sam.GCLK_STATUS_SYNCBUSY) {
-	}
-
-	sam.GCLK.CLKCTRL.Set(sam.GCLK_CLKCTRL_ID_WDT | (sam.GCLK_CLKCTRL_GEN_GCLK8 << sam.GCLK_CLKCTRL_GEN_Pos) | sam.GCLK_CLKCTRL_CLKEN)
-}
-
 // PatchedGCLK0Frequency returns a valid frequency for the SPI peripheral, based
 // on the custom GCLK0 prescaler value. This workaround is needed because
 // machine.CPUFrequency on SAMD21 returns a hardcoded value of 48MHz.
