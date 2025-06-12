@@ -8,6 +8,9 @@ import (
 	"eclair/hal/watchdog"
 )
 
+var disp *display.Display
+var keys *keypad.Keypad
+
 type Entry struct {
 	name       string
 	entrypoint func()
@@ -23,7 +26,7 @@ func clamp(value int, min int, max int) int {
 	return value
 }
 
-func refreshDisplay(disp display.Display, pos int) {
+func refreshDisplay(pos int) {
 	disp.ClearBuffer()
 
 	opt := apps[pos]
@@ -43,11 +46,11 @@ func Run() {
 
 	// - display -
 
-	disp := display.New()
+	disp = display.Configure()
 
 	// - keypad -
 
-	keys := keypad.New()
+	keys = keypad.Configure()
 
 	keys.SetHandlers([]func(keypad.EventType){
 		nil,
@@ -55,7 +58,7 @@ func Run() {
 		func(et keypad.EventType) {
 			if et.Released() {
 				pos = clamp(pos-1, 0, len(apps)-1)
-				refreshDisplay(disp, pos)
+				refreshDisplay(pos)
 			}
 		},
 		nil,
@@ -65,7 +68,7 @@ func Run() {
 		func(et keypad.EventType) {
 			if et.Released() {
 				pos = clamp(pos+1, 0, len(apps)-1)
-				refreshDisplay(disp, pos)
+				refreshDisplay(pos)
 			}
 		},
 		nil,
@@ -86,7 +89,7 @@ func Run() {
 
 	// - main loop -
 
-	refreshDisplay(disp, pos)
+	refreshDisplay(pos)
 
 	for {
 		watchdog.Feed()

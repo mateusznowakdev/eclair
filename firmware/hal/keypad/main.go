@@ -66,8 +66,9 @@ type Keypad struct {
 	e1    *Event
 }
 
-// New creates a new Keypad instance, and configures pins of a keyboard matrix.
-func New() Keypad {
+// Configure creates a new Keypad instance, and configures pins of a keyboard
+// matrix.
+func Configure() *Keypad {
 	cols := []machine.Pin{machine.KEYS_COL1_PIN, machine.KEYS_COL2_PIN, machine.KEYS_COL3_PIN, machine.KEYS_COL4_PIN, machine.KEYS_COL5_PIN}
 	rows := []machine.Pin{machine.KEYS_ROW1_PIN, machine.KEYS_ROW2_PIN, machine.KEYS_ROW3_PIN}
 
@@ -81,7 +82,7 @@ func New() Keypad {
 	keypad := Keypad{rows: rows, cols: cols, handlers: nil}
 	keypad.clearState()
 
-	return keypad
+	return &keypad
 }
 
 func (k *Keypad) scan() *Event {

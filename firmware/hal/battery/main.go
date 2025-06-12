@@ -14,9 +14,9 @@ type Battery struct {
 	good    bool
 }
 
-// New creates a new Battery instance and configures the underlying ADC channel
-// using 1V fixed reference voltage.
-func New() Battery {
+// Configure creates a new Battery instance and configures the underlying ADC
+// channel using 1V fixed reference voltage.
+func Configure() *Battery {
 	machine.InitADC()
 
 	adc := machine.ADC{Pin: machine.VMETER_PIN}
@@ -25,7 +25,7 @@ func New() Battery {
 	sam.ADC.INPUTCTRL.ReplaceBits(sam.ADC_INPUTCTRL_GAIN_1X, 0xF, sam.ADC_INPUTCTRL_GAIN_Pos)
 	sam.ADC.REFCTRL.ReplaceBits(sam.ADC_REFCTRL_REFSEL_INT1V, 0xF, sam.ADC_REFCTRL_REFSEL_Pos)
 
-	return Battery{adc: adc}
+	return &Battery{adc: adc}
 }
 
 func (b *Battery) refresh() {

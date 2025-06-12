@@ -22,19 +22,13 @@ type Display struct {
 	inverted bool
 }
 
-func newSPI() *machine.SPI {
+// Configure creates a new Display instance, configures a SERCOM bus in SPI
+// mode, and sends the initialization sequence to the display.
+func Configure() *Display {
 	frequency := uint32(clocks.PatchedGCLK0Frequency(8_000_000))
 
 	spi := machine.SPI0
 	spi.Configure(machine.SPIConfig{Frequency: frequency})
-
-	return spi
-}
-
-// New creates a new Display instance, configures a SERCOM bus in SPI mode, and
-// sends the initialization sequence to the display.
-func New() Display {
-	spi := newSPI()
 
 	device := ssd1306.NewSPI(spi, machine.DISP_DC_PIN, machine.DISP_RST_PIN, machine.DISP_CS_PIN)
 	device.Configure(ssd1306.Config{Width: Width, Height: Height})
@@ -49,7 +43,7 @@ func New() Display {
 	display.SetContrast(ContrastNormal)
 	display.SetInverted(false)
 
-	return display
+	return &display
 }
 
 // ClearBuffer clears the display buffer.

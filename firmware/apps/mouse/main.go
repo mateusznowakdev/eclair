@@ -11,6 +11,9 @@ import (
 	"eclair/hal/watchdog"
 )
 
+var disp *display.Display
+var keys *keypad.Keypad
+
 const acceleration = 1.1
 const maxSpeed = 8.0
 
@@ -20,7 +23,7 @@ func Run() {
 
 	// - display -
 
-	disp := display.New()
+	disp = display.Configure()
 
 	disp.ClearBuffer()
 	disp.DrawText([]byte("- mouse mode -"), 1, 2)
@@ -30,7 +33,7 @@ func Run() {
 
 	// - keypad -
 
-	keys := keypad.New()
+	keys = keypad.Configure()
 
 	keys.SetHandlers([]func(keypad.EventType){
 		func(et keypad.EventType) {

@@ -13,6 +13,10 @@ import (
 	"eclair/hal/watchdog"
 )
 
+var batt *battery.Battery
+var disp *display.Display
+var keys *keypad.Keypad
+
 func deleteLine(note *Note) {
 	lines := display.GetLines(note.file.Data)
 
@@ -24,7 +28,7 @@ func deleteLine(note *Note) {
 	note.markDirty()
 }
 
-func dimScreen(disp *display.Display) {
+func dimScreen() {
 	if disp.Contrast() != display.ContrastLow {
 		disp.SetContrast(display.ContrastLow)
 	} else {
@@ -79,7 +83,7 @@ func handler(note *Note, shift bool, et keypad.EventType, alt func(), opts ...by
 	return false
 }
 
-func insertExtra(note *Note, disp *display.Display) {
+func insertExtra(note *Note) {
 	result := charmap.Run(disp)
 	if result > 0 {
 		note.insert(byte(result))
@@ -114,7 +118,7 @@ func prevLine(note *Note) {
 	}
 }
 
-func refreshDisplay(disp display.Display, batt battery.Battery, note Note, shift bool) {
+func refreshDisplay(note *Note, shift bool) {
 	disp.ClearBuffer()
 	disp.DrawMultiText(note.file.Data, note.cursor)
 
@@ -175,11 +179,11 @@ func Run() {
 
 	// - display -
 
-	disp := display.New()
+	disp = display.Configure()
 
 	// - keypad -
 
-	keys := keypad.New()
+	keys = keypad.Configure()
 
 	keys.SetBoolHandlers([]func(keypad.EventType) bool{
 		func(et keypad.EventType) bool {
@@ -192,7 +196,7 @@ func Run() {
 			return handler(&note, shift, et, func() { prevLine(&note) }, 't', 'y', '3')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, func() { insertExtra(&note, &disp) }, 'u', 'i', '4')
+			return handler(&note, shift, et, func() { insertExtra(&note) }, 'u', 'i', '4')
 		},
 		func(et keypad.EventType) bool {
 			return handler(&note, shift, et, func() { note.delete() }, 'o', 'p', '5')
@@ -219,7 +223,7 @@ func Run() {
 			return handler(&note, shift, et, func() { deleteLine(&note) }, 'c', 'v', '?')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, func() { dimScreen(&disp) }, 'b', 'n', '\'')
+			return handler(&note, shift, et, func() { dimScreen() }, 'b', 'n', '\'')
 		},
 		func(et keypad.EventType) bool {
 			return handler(&note, shift, et, func() { note.insert(' ') }, 'm', '.', ',')
@@ -229,11 +233,11 @@ func Run() {
 
 	// - battery -
 
-	batt := battery.New()
+	batt = battery.Configure()
 
 	// - main loop -
 
-	refreshDisplay(disp, batt, note, shift)
+	refreshDisplay(&note, shift)
 
 	for {
 		watchdog.Feed()
@@ -248,6 +252,6 @@ func Run() {
 			continue
 		}
 
-		refreshDisplay(disp, batt, note, shift)
+		refreshDisplay(&note, shift)
 	}
 }

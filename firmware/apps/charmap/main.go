@@ -14,6 +14,9 @@ var chars = [][]byte{
 	{0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87},
 }
 
+var disp *display.Display
+var keys *keypad.Keypad
+
 // there is no support for horizontal text centering, and having one would
 // slow down the main text renderer, so for now have this offset map instead
 var offs = [][]uint8{
@@ -24,7 +27,7 @@ var offs = [][]uint8{
 	{0, 0, 0, 0, 0, 0, 0, 0},
 }
 
-func refreshDisplay(disp *display.Display, posX int, posY int) {
+func refreshDisplay(posX int, posY int) {
 	disp.ClearBufferTop()
 
 	for charNo, char := range chars[posY] {
@@ -45,7 +48,7 @@ func wrap(value int, min int, max int) int {
 	return value
 }
 
-func Run(disp *display.Display) int {
+func Run(dispParent *display.Display) int {
 	posX := 0
 	posY := 0
 
@@ -53,9 +56,11 @@ func Run(disp *display.Display) int {
 
 	// - using existing display instance to prevent it from being reset -
 
+	disp = dispParent
+
 	// - keypad -
 
-	keys := keypad.New()
+	keys = keypad.Configure()
 
 	keys.SetHandlers([]func(keypad.EventType){
 		func(et keypad.EventType) {
@@ -67,7 +72,7 @@ func Run(disp *display.Display) int {
 		func(et keypad.EventType) {
 			if et.Released() {
 				posY = wrap(posY-1, 0, len(chars)-1)
-				refreshDisplay(disp, posX, posY)
+				refreshDisplay(posX, posY)
 			}
 		},
 		nil,
@@ -76,19 +81,19 @@ func Run(disp *display.Display) int {
 		func(et keypad.EventType) {
 			if et.Released() {
 				posX = wrap(posX-1, 0, len(chars[0])-1)
-				refreshDisplay(disp, posX, posY)
+				refreshDisplay(posX, posY)
 			}
 		},
 		func(et keypad.EventType) {
 			if et.Released() {
 				posY = wrap(posY+1, 0, len(chars)-1)
-				refreshDisplay(disp, posX, posY)
+				refreshDisplay(posX, posY)
 			}
 		},
 		func(et keypad.EventType) {
 			if et.Released() {
 				posX = wrap(posX+1, 0, len(chars[0])-1)
-				refreshDisplay(disp, posX, posY)
+				refreshDisplay(posX, posY)
 			}
 		},
 		func(et keypad.EventType) {
@@ -105,7 +110,7 @@ func Run(disp *display.Display) int {
 
 	// - main loop -
 
-	refreshDisplay(disp, posX, posY)
+	refreshDisplay(posX, posY)
 
 	for result == 0 {
 		watchdog.Feed()

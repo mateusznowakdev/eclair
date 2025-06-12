@@ -7,10 +7,13 @@ import (
 	"eclair/hal/watchdog"
 )
 
+var disp *display.Display
+var keys *keypad.Keypad
+
 func Run() {
 	// - display -
 
-	disp := display.New()
+	disp = display.Configure()
 
 	disp.ClearBuffer()
 	disp.DrawText([]byte("- hold any key -"), 1, 0)
@@ -30,7 +33,7 @@ func Run() {
 		}
 	}
 
-	keys := keypad.New()
+	keys = keypad.Configure()
 
 	keys.SetHandlers([]func(keypad.EventType){
 		func(et keypad.EventType) {
