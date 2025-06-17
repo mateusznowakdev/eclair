@@ -1,7 +1,7 @@
 name: Build UF2 firmware
 env:
   TINYGO_ROOT: /usr/local/lib/tinygo
-  TINYGO_VERSION: "0.37.0"
+  TINYGO_VERSION: "0.38.0"
 on:
   push:
     tags:
