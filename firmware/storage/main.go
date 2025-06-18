@@ -5,6 +5,35 @@ import (
 	"machine"
 )
 
+type Filesystem struct {
+}
+
+func Configure() (*Filesystem, error) {
+	return nil, nil
+}
+
+func (fs *Filesystem) Read(name string) ([]byte, error) {
+	return nil, nil
+}
+
+func (fs *Filesystem) Write(name string, data []byte) error {
+	return nil
+}
+
+func (fs *Filesystem) Erase(name string) error {
+	return nil
+}
+
+func (fs *Filesystem) Exists(name string) (bool, error) {
+	return false, nil
+}
+
+func (fs *Filesystem) MaxSize() int {
+	return int(machine.Flash.EraseBlockSize())
+}
+
+// ----------------- old attempts
+
 type Bounds struct {
 	StartBlock uint
 	EndBlock   uint
