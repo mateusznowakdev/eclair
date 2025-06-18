@@ -17,21 +17,11 @@ var chars = [][]byte{
 var disp *display.Display
 var keys *keypad.Keypad
 
-// there is no support for horizontal text centering, and having one would
-// slow down the main text renderer, so for now have this offset map instead
-var offs = [][]uint8{
-	{5, 5, 5, 5, 5, 3, 2, 2},
-	{2, 3, 5, 1, 1, 2, 2, 3},
-	{2, 2, 3, 3, 4, 4, 3, 3},
-	{2, 3, 2, 3, 5, 2, 2, 3},
-	{0, 0, 0, 0, 0, 0, 0, 0},
-}
-
 func refreshDisplay(posX int, posY int) {
 	disp.ClearBufferTop()
 
 	for charNo, char := range chars[posY] {
-		disp.DrawText([]byte{char}, uint(charNo)*16+uint(offs[posY][charNo]), 0)
+		disp.DrawText([]byte{char}, charNo*16+8, 0, display.AlignCenter)
 	}
 
 	disp.DrawTextFrame(uint(posX*16), uint(posX*16+14), 0)
