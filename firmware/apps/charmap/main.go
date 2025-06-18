@@ -31,10 +31,10 @@ func refreshDisplay(posX int, posY int) {
 	disp.ClearBufferTop()
 
 	for charNo, char := range chars[posY] {
-		disp.DrawText([]byte{char}, 0, uint(charNo)*16+uint(offs[posY][charNo]))
+		disp.DrawText([]byte{char}, uint(charNo)*16+uint(offs[posY][charNo]), 0)
 	}
 
-	disp.DrawTextFrame(0, uint(posX*16), uint(posX*16+14))
+	disp.DrawTextFrame(uint(posX*16), uint(posX*16+14), 0)
 	disp.Display()
 }
 

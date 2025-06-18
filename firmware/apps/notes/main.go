@@ -124,10 +124,10 @@ func refreshDisplay(note *Note, shift bool) {
 
 	if note.dirty() {
 		icon := icons[iconFile]
-		disp.DrawSprite(icon, 0, uint(display.Width-len(icon)))
+		disp.DrawSprite(icon, uint(display.Width-len(icon)), 0)
 	} else if !batt.Good() {
 		icon := icons[iconBattery]
-		disp.DrawSprite(icon, 0, uint(display.Width-len(icon)))
+		disp.DrawSprite(icon, uint(display.Width-len(icon)), 0)
 	}
 
 	if shift {
