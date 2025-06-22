@@ -9,7 +9,9 @@ import (
 )
 
 var apps = []Entry{
-	{"notes", notes.Run},
+	{"note 1", func() { notes.Run(notes.DefaultName) }},
+	{"note 2", func() { notes.Run("note2.txt") }},
+	{"note 3", func() { notes.Run("note3.txt") }},
 	{"mouse", mouse.Run},
 	{"flashlight", flashlight.Run},
 	{"format", erase.Run},

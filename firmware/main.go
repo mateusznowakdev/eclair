@@ -17,6 +17,6 @@ func main() {
 	if reset.IsSoftReset() {
 		launcher.Run()
 	} else {
-		notes.Run()
+		notes.Run(notes.DefaultName)
 	}
 }

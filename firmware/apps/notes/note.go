@@ -8,24 +8,26 @@ import (
 	"github.com/mateusznowakdev/minifs"
 )
 
-const name = "note.txt"
+const DefaultName = "note1.txt"
+
 const writeDelay = 1500 // ms
 
 type Note struct {
 	fs *minifs.Filesystem
 
+	name      string
 	data      []byte
 	cursor    int
 	timestamp int64
 }
 
-func NewNote() (*Note, error) {
+func NewNote(name string) (*Note, error) {
 	fs, err := minifs.Configure(machine.Flash)
 	if err != nil {
 		return nil, err
 	}
 
-	return &Note{fs: fs}, nil
+	return &Note{fs: fs, name: name}, nil
 }
 
 func (n *Note) cursorLeft() {
@@ -75,13 +77,13 @@ func (n *Note) markDirty() {
 }
 
 func (n *Note) read() error {
-	exists, err := n.fs.Exists(name)
+	exists, err := n.fs.Exists(n.name)
 	if err != nil {
 		return err
 	}
 
 	if exists {
-		data, err := n.fs.Read(name)
+		data, err := n.fs.Read(n.name)
 		if err != nil {
 			return err
 		}
@@ -107,7 +109,7 @@ func (n *Note) replace(b byte) {
 func (n *Note) write() error {
 	n.timestamp = 0
 
-	err := n.fs.Write(name, n.data)
+	err := n.fs.Write(n.name, n.data)
 	if err != nil {
 		return err
 	}

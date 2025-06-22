@@ -157,7 +157,7 @@ func upper(value byte, shift bool) byte {
 	return value
 }
 
-func Run() {
+func Run(name string) {
 	var note *Note
 	shift := false
 
@@ -221,7 +221,7 @@ func Run() {
 
 	// - load data -
 
-	note, err := NewNote()
+	note, err := NewNote(name)
 	if err != nil {
 		disp.ClearBuffer()
 		disp.DrawText([]byte("- no format -"), display.Width/2, 8, display.AlignCenter)
