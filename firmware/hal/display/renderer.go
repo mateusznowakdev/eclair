@@ -1,9 +1,15 @@
 package display
 
+import (
+	"eclair/assets/font"
+	"eclair/assets/sprites"
+)
+
 const cursorData = 0x5555
 
-const maxSpriteLines = Height / 8
-const maxTextLines = maxSpriteLines - 1
+const maxSprite8Lines = Height / 8
+const maxSprite16Lines = maxSprite8Lines - 1
+const maxTextLines = maxSprite16Lines
 
 const (
 	AlignLeft Alignment = iota
@@ -28,9 +34,17 @@ func drawCursor(buffer []byte, bufferPos int) {
 	buffer[bufferPos+Width] = cursorData >> 8
 }
 
-func drawSprite(sprite []uint8, buffer []byte, x int, y int, align Alignment) {
+func drawSprite(id int, buffer []byte, x int, y int, align Alignment) {
 	line := y / 8
-	if line >= maxSpriteLines {
+	if y < 0 || line >= maxSprite8Lines {
+		return
+	}
+	if isTallSprite(id) && line >= maxSprite16Lines {
+		return
+	}
+
+	sprite := getSprite(id)
+	if sprite == nil {
 		return
 	}
 
@@ -49,14 +63,17 @@ func drawSprite(sprite []uint8, buffer []byte, x int, y int, align Alignment) {
 			break
 		}
 
-		buffer[bufferStart+x] = col
+		buffer[bufferStart+x] = uint8(col >> 0)
+		if isTallSprite(id) {
+			buffer[bufferStart+Width+x] = uint8(col >> 8)
+		}
 		x += 1
 	}
 }
 
 func drawText(text []byte, cursor int, buffer []byte, x int, y int, align Alignment) {
 	line := y / 8
-	if line >= maxTextLines {
+	if y < 0 || line >= maxTextLines {
 		return
 	}
 
@@ -111,7 +128,7 @@ func drawText(text []byte, cursor int, buffer []byte, x int, y int, align Alignm
 
 func drawTextFrame(buffer []byte, x1 uint, x2 uint, y uint) {
 	line := y / 8
-	if line >= maxTextLines {
+	if line >= maxSprite16Lines {
 		return
 	}
 
@@ -134,12 +151,30 @@ func getGlyph(char byte) []uint16 {
 	missing := 0x7F
 
 	idx := int(char) - first
-	if idx < 0 || idx >= len(font) {
+	if idx < 0 || idx >= len(font.Data) {
 		idx = missing - first
 	}
 
-	glyph := font[idx]
+	glyph := font.Data[idx]
 	return glyph
+}
+
+func getSprite(id int) []uint16 {
+	spritesheet := sprites.Data8
+	if isTallSprite(id) {
+		id &= 0xFF
+		spritesheet = sprites.Data16
+	}
+
+	if id < 0 || id >= len(spritesheet) {
+		return nil
+	}
+
+	return spritesheet[id]
+}
+
+func isTallSprite(id int) bool {
+	return id >= 0x100
 }
 
 // DrawMultiText fills the entire display buffer with the defined text.
@@ -174,8 +209,8 @@ func (d *Display) DrawMultiText(text []byte, cursor int) {
 }
 
 // DrawSprite copies a sprite data to the display buffer at given position.
-func (d *Display) DrawSprite(sprite []uint8, x int, y int, align Alignment) {
-	drawSprite(sprite, d.device.GetBuffer(), x, y, align)
+func (d *Display) DrawSprite(id int, x int, y int, align Alignment) {
+	drawSprite(id, d.device.GetBuffer(), x, y, align)
 }
 
 // DrawText renders text to the display buffer at given position.
