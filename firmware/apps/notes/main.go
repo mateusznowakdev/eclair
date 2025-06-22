@@ -17,17 +17,6 @@ var batt *battery.Battery
 var disp *display.Display
 var keys *keypad.Keypad
 
-func deleteLine(note *Note) {
-	lines := display.GetLines(note.data)
-
-	lineNo := getCursorLineNumber(lines, note.cursor)
-	line := lines[lineNo]
-
-	note.data = slices.Delete(note.data, line.Start, line.End)
-	note.cursor = line.Start
-	note.markDirty()
-}
-
 func dimScreen() {
 	if disp.Contrast() != display.ContrastLow {
 		disp.SetContrast(display.ContrastLow)
@@ -169,17 +158,7 @@ func upper(value byte, shift bool) byte {
 }
 
 func Run() {
-	note, err := NewNote()
-	if err != nil {
-		// TODO: show error message, ask user to format
-		panic(err)
-	}
-
-	err = note.read()
-	if err != nil {
-		panic(err)
-	}
-
+	var note *Note
 	shift := false
 
 	// - display -
@@ -225,7 +204,7 @@ func Run() {
 			return handler(note, shift, et, nil, 'z', 'x', '!')
 		},
 		func(et keypad.EventType) bool {
-			return handler(note, shift, et, func() { deleteLine(note) }, 'c', 'v', '?')
+			return handler(note, shift, et, nil, 'c', 'v', '?')
 		},
 		func(et keypad.EventType) bool {
 			return handler(note, shift, et, func() { dimScreen() }, 'b', 'n', '\'')
@@ -239,6 +218,23 @@ func Run() {
 	// - battery -
 
 	batt = battery.Configure()
+
+	// - load data -
+
+	note, err := NewNote()
+	if err != nil {
+		disp.ClearBuffer()
+		disp.DrawText([]byte("- no format -"), display.Width/2, 8, display.AlignCenter)
+		disp.Display()
+
+		time.Sleep(2 * time.Second)
+		return
+	}
+
+	err = note.read()
+	if err != nil {
+		panic(err)
+	}
 
 	// - main loop -
 

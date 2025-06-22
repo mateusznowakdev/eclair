@@ -5,6 +5,7 @@ import (
 
 	"eclair/hal/display"
 	"eclair/hal/keypad"
+	"eclair/hal/reset"
 	"eclair/hal/watchdog"
 )
 
@@ -78,6 +79,7 @@ func Run() {
 				time.Sleep(250 * time.Millisecond)
 
 				apps[pos].entrypoint()
+				reset.SoftReset()
 			}
 		},
 		nil,
