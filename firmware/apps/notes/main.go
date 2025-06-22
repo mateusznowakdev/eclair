@@ -18,12 +18,12 @@ var disp *display.Display
 var keys *keypad.Keypad
 
 func deleteLine(note *Note) {
-	lines := display.GetLines(note.file.Data)
+	lines := display.GetLines(note.data)
 
 	lineNo := getCursorLineNumber(lines, note.cursor)
 	line := lines[lineNo]
 
-	note.file.Data = slices.Delete(note.file.Data, line.Start, line.End)
+	note.data = slices.Delete(note.data, line.Start, line.End)
 	note.cursor = line.Start
 	note.markDirty()
 }
@@ -91,20 +91,20 @@ func insertExtra(note *Note) {
 }
 
 func nextLine(note *Note) {
-	lines := display.GetLines(note.file.Data)
+	lines := display.GetLines(note.data)
 	lineNo := getCursorLineNumber(lines, note.cursor)
 
 	if lineNo < len(lines)-1 {
 		// go down one line at the time
 		note.cursor = lines[lineNo+1].Start
-	} else if note.cursor < len(note.file.Data) {
+	} else if note.cursor < len(note.data) {
 		// then go to the end of a line
-		note.cursor = len(note.file.Data)
+		note.cursor = len(note.data)
 	}
 }
 
 func prevLine(note *Note) {
-	lines := display.GetLines(note.file.Data)
+	lines := display.GetLines(note.data)
 
 	lineNo := getCursorLineNumber(lines, note.cursor)
 	line := lines[lineNo]
@@ -120,7 +120,7 @@ func prevLine(note *Note) {
 
 func refreshDisplay(note *Note, shift bool) {
 	disp.ClearBuffer()
-	disp.DrawMultiText(note.file.Data, note.cursor)
+	disp.DrawMultiText(note.data, note.cursor)
 
 	if note.dirty() {
 		icon := icons[iconFile]
@@ -139,7 +139,7 @@ func refreshDisplay(note *Note, shift bool) {
 }
 
 func saveAndExit(note *Note) {
-	_, err := note.write()
+	err := note.write()
 	if err != nil {
 		panic(err)
 	}
@@ -148,7 +148,7 @@ func saveAndExit(note *Note) {
 }
 
 func sendToPC(note *Note) {
-	for _, char := range note.file.Data {
+	for _, char := range note.data {
 		keys := keymap[char-32]
 		for _, key := range keys {
 			keyboard.Keyboard.Down(key)
@@ -169,13 +169,18 @@ func upper(value byte, shift bool) byte {
 }
 
 func Run() {
-	shift := false
+	note, err := NewNote()
+	if err != nil {
+		// TODO: show error message, ask user to format
+		panic(err)
+	}
 
-	note := NewNote()
-	_, err := note.read()
+	err = note.read()
 	if err != nil {
 		panic(err)
 	}
+
+	shift := false
 
 	// - display -
 
@@ -187,46 +192,46 @@ func Run() {
 
 	keys.SetBoolHandlers([]func(keypad.EventType) bool{
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, func() { saveAndExit(&note) }, 'q', 'w', '1')
+			return handler(note, shift, et, func() { saveAndExit(note) }, 'q', 'w', '1')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, nil, 'e', 'r', '2')
+			return handler(note, shift, et, nil, 'e', 'r', '2')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, func() { prevLine(&note) }, 't', 'y', '3')
+			return handler(note, shift, et, func() { prevLine(note) }, 't', 'y', '3')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, func() { insertExtra(&note) }, 'u', 'i', '4')
+			return handler(note, shift, et, func() { insertExtra(note) }, 'u', 'i', '4')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, func() { note.delete() }, 'o', 'p', '5')
+			return handler(note, shift, et, func() { note.delete() }, 'o', 'p', '5')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, func() { shift = !shift }, 'a', 's', '6')
+			return handler(note, shift, et, func() { shift = !shift }, 'a', 's', '6')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, func() { note.cursorLeft() }, 'd', 'f', '7')
+			return handler(note, shift, et, func() { note.cursorLeft() }, 'd', 'f', '7')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, func() { nextLine(&note) }, 'g', 'h', '8')
+			return handler(note, shift, et, func() { nextLine(note) }, 'g', 'h', '8')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, func() { note.cursorRight() }, 'j', 'k', '9')
+			return handler(note, shift, et, func() { note.cursorRight() }, 'j', 'k', '9')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, func() { sendToPC(&note) }, 'l', '-', '0')
+			return handler(note, shift, et, func() { sendToPC(note) }, 'l', '-', '0')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, nil, 'z', 'x', '!')
+			return handler(note, shift, et, nil, 'z', 'x', '!')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, func() { deleteLine(&note) }, 'c', 'v', '?')
+			return handler(note, shift, et, func() { deleteLine(note) }, 'c', 'v', '?')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, func() { dimScreen() }, 'b', 'n', '\'')
+			return handler(note, shift, et, func() { dimScreen() }, 'b', 'n', '\'')
 		},
 		func(et keypad.EventType) bool {
-			return handler(&note, shift, et, func() { note.insert(' ') }, 'm', '.', ',')
+			return handler(note, shift, et, func() { note.insert(' ') }, 'm', '.', ',')
 		},
 		nil,
 	})
@@ -237,7 +242,7 @@ func Run() {
 
 	// - main loop -
 
-	refreshDisplay(&note, shift)
+	refreshDisplay(note, shift)
 
 	for {
 		watchdog.Feed()
@@ -252,6 +257,6 @@ func Run() {
 			continue
 		}
 
-		refreshDisplay(&note, shift)
+		refreshDisplay(note, shift)
 	}
 }

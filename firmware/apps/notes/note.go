@@ -1,27 +1,31 @@
 package notes
 
 import (
+	"machine"
 	"slices"
 	"time"
 
-	"eclair/apps"
-	"eclair/storage"
+	"github.com/mateusznowakdev/minifs"
 )
 
+const name = "note.txt"
 const writeDelay = 1500 // ms
 
 type Note struct {
-	file *storage.File
+	fs *minifs.Filesystem
 
+	data      []byte
 	cursor    int
 	timestamp int64
 }
 
-func NewNote() Note {
-	bounds := apps.Bounds["notes"]
-	file := storage.NewFile(bounds)
+func NewNote() (*Note, error) {
+	fs, err := minifs.Configure(machine.Flash)
+	if err != nil {
+		return nil, err
+	}
 
-	return Note{file: file}
+	return &Note{fs: fs}, nil
 }
 
 func (n *Note) cursorLeft() {
@@ -31,14 +35,14 @@ func (n *Note) cursorLeft() {
 }
 
 func (n *Note) cursorRight() {
-	if n.cursor < len(n.file.Data) {
+	if n.cursor < len(n.data) {
 		n.cursor += 1
 	}
 }
 
 func (n *Note) delete() {
 	if n.cursor > 0 {
-		n.file.Data = slices.Delete(n.file.Data, n.cursor-1, n.cursor)
+		n.data = slices.Delete(n.data, n.cursor-1, n.cursor)
 		n.cursor -= 1
 	}
 
@@ -50,8 +54,8 @@ func (n *Note) dirty() bool {
 }
 
 func (n *Note) insert(b byte) {
-	if len(n.file.Data) < n.file.MaxSize() {
-		n.file.Data = slices.Insert(n.file.Data, n.cursor, b)
+	if len(n.data) < n.fs.MaxFileSize() {
+		n.data = slices.Insert(n.data, n.cursor, b)
 		n.cursor += 1
 	}
 
@@ -60,7 +64,7 @@ func (n *Note) insert(b byte) {
 
 func (n *Note) last() byte {
 	if n.cursor > 0 {
-		return n.file.Data[n.cursor-1]
+		return n.data[n.cursor-1]
 	} else {
 		return 0
 	}
@@ -70,24 +74,45 @@ func (n *Note) markDirty() {
 	n.timestamp = time.Now().UnixMilli()
 }
 
-func (n *Note) read() (bool, error) {
-	success, err := n.file.Read()
-	n.cursor = len(n.file.Data)
+func (n *Note) read() error {
+	exists, err := n.fs.Exists(name)
+	if err != nil {
+		return err
+	}
 
-	return success, err
+	if exists {
+		data, err := n.fs.Read(name)
+		if err != nil {
+			return err
+		}
+
+		n.data = data
+		n.cursor = len(n.data)
+	} else {
+		n.data = make([]byte, 0)
+		n.cursor = 0
+	}
+
+	return nil
 }
 
 func (n *Note) replace(b byte) {
 	if n.cursor > 0 {
-		n.file.Data[n.cursor-1] = b
+		n.data[n.cursor-1] = b
 	}
 
 	n.markDirty()
 }
 
-func (n *Note) write() (bool, error) {
+func (n *Note) write() error {
 	n.timestamp = 0
-	return true, n.file.Write()
+
+	err := n.fs.Write(name, n.data)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (n *Note) writeDelayed() (bool, error) {
@@ -95,5 +120,6 @@ func (n *Note) writeDelayed() (bool, error) {
 		return false, nil
 	}
 
-	return n.write()
+	err := n.write()
+	return err == nil, err
 }

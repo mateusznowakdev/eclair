@@ -1,4 +1,6 @@
 github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 h1:El6M4kTTCOh6aBiKaUGG7oYTSPP8MxqL4YI3kZKwcP4=
 github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510/go.mod h1:pupxD2MaaD3pAXIBCelhxNneeOaAeabZDe5s4K6zSpQ=
+github.com/mateusznowakdev/minifs v0.1.0 h1:U78GGl9N4u9s7ASlCFfFwPDMw2Qz6kjgMywoAObxpr0=
+github.com/mateusznowakdev/minifs v0.1.0/go.mod h1:wNEpKRk+eb+vz8q/6PCyeCHcUHTbTgHEiYdw6rZEPJk=
 tinygo.org/x/drivers v0.32.0 h1:qz7MRR1ZBIUhWC6kc4XuVNPr2+mUT8m7QJwA+Jji4IU=
 tinygo.org/x/drivers v0.32.0/go.mod h1:ZdErNrApSABdVXjA1RejD67R8SNRI6RKVfYgQDZtKtk=
