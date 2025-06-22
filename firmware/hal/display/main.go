@@ -28,7 +28,7 @@ func Configure() *Display {
 	frequency := uint32(clocks.PatchedGCLK0Frequency(8_000_000))
 
 	spi := machine.SPI0
-	spi.Configure(machine.SPIConfig{Frequency: frequency})
+	_ = spi.Configure(machine.SPIConfig{Frequency: frequency})
 
 	device := ssd1306.NewSPI(spi, machine.DISP_DC_PIN, machine.DISP_RST_PIN, machine.DISP_CS_PIN)
 	device.Configure(ssd1306.Config{Width: Width, Height: Height})
@@ -71,7 +71,7 @@ func (d *Display) Contrast() uint8 {
 
 // Display sends the buffer data to the display.
 func (d *Display) Display() {
-	d.device.Display()
+	_ = d.device.Display()
 }
 
 // Inverted returns the current invert state.

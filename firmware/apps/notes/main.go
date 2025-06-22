@@ -140,11 +140,11 @@ func sendToPC(note *Note) {
 	for _, char := range note.data {
 		keys := keymap[char-32]
 		for _, key := range keys {
-			keyboard.Keyboard.Down(key)
+			_ = keyboard.Keyboard.Down(key)
 			time.Sleep(10 * time.Millisecond)
 		}
 		for _, key := range slices.Backward(keys) {
-			keyboard.Keyboard.Up(key)
+			_ = keyboard.Keyboard.Up(key)
 			time.Sleep(10 * time.Millisecond)
 		}
 	}
