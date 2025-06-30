@@ -12,9 +12,9 @@ front-output = main-User_9.gbr.ngc
 
 # milling
 
-mill-diameters = 0.15mm
+mill-diameters = 0.1mm
 mill-feed = 75mm/min
 mill-infeed = 0.1mm
 mill-speed = 2000rpm
-zwork = -0.4mm
+zwork = -0.1mm
 invert-gerbers = true
