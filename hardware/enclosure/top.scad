@@ -40,9 +40,9 @@ module ExtrudeSlideSwitch() {
 }
 
 module CutoutDisplay() {
-  translate([0, 12])
+  translate([0, 12.25])
     linear_extrude(wfr+0.001) // prevent rendering issues
-      rsquare([25, 8], r=1, center=true);
+      rsquare([25, 8.5], r=1, center=true);
 }
 
 module CutoutButtons() {
