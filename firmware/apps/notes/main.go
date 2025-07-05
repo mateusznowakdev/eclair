@@ -17,6 +17,17 @@ var batt *battery.Battery
 var disp *display.Display
 var keys *keypad.Keypad
 
+func deleteLine(note *Note) {
+	lines := display.GetLines(note.data)
+
+	lineNo := getCursorLineNumber(lines, note.cursor)
+	line := lines[lineNo]
+
+	note.data = slices.Delete(note.data, line.Start, line.End)
+	note.cursor = line.Start
+	note.markDirty()
+}
+
 func dimScreen() {
 	if disp.Contrast() != display.ContrastLow {
 		disp.SetContrast(display.ContrastLow)
@@ -201,7 +212,7 @@ func Run(name string) {
 			return handler(note, shift, et, nil, 'z', 'x', '!')
 		},
 		func(et keypad.EventType) bool {
-			return handler(note, shift, et, nil, 'c', 'v', '?')
+			return handler(note, shift, et, func() { deleteLine(note) }, 'c', 'v', '?')
 		},
 		func(et keypad.EventType) bool {
 			return handler(note, shift, et, func() { dimScreen() }, 'b', 'n', '\'')
