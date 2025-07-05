@@ -112,16 +112,13 @@ func refreshDisplay(note *Note, shift bool) {
 	disp.DrawMultiText(note.data, note.cursor)
 
 	if note.dirty() {
-		icon := icons[iconFile]
-		disp.DrawSprite(icon, display.Width, 0, display.AlignRight)
+		disp.DrawSprite8(icons, iconFile, display.Width-8, 0, display.MaskAll, nil)
 	} else if !batt.Good() {
-		icon := icons[iconBattery]
-		disp.DrawSprite(icon, display.Width, 0, display.AlignRight)
+		disp.DrawSprite8(icons, iconBattery, display.Width-8, 0, display.MaskAll, nil)
 	}
 
 	if shift {
-		icon := icons[iconShift]
-		disp.DrawSprite(icon, 0, 0, display.AlignLeft)
+		disp.DrawSprite8(icons, iconShift, 0, 0, display.MaskAll, nil)
 	}
 
 	disp.Display()

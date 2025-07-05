@@ -24,7 +24,7 @@ func refreshDisplay(posX int, posY int) {
 		disp.DrawText([]byte{char}, charNo*16+8, 0, display.AlignCenter)
 	}
 
-	disp.DrawTextFrame(uint(posX*16), uint(posX*16+14), 0)
+	// disp.DrawTextFrame(uint(posX*16), uint(posX*16+14), 0)
 	disp.Display()
 }
 
