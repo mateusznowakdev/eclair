@@ -3,6 +3,7 @@ package launcher
 import (
 	"time"
 
+	"eclair/apps/bootloader"
 	"eclair/hal/display"
 	"eclair/hal/keypad"
 	"eclair/hal/reset"
@@ -28,8 +29,8 @@ func Run() {
 			continue
 		}
 
-		x := 29 * (appId % 5)
-		y := 16 * (appId / 5)
+		x := 28*(appId%5) + 2
+		y := 20*(appId/5) - 2
 		disp.DrawSprite16(icons, app.icon, x, y, display.MaskNone, nil)
 	}
 
@@ -38,16 +39,12 @@ func Run() {
 	// - keypad -
 
 	handler := func(et keypad.EventType, id int) {
-		if et.Pressed() {
-			entrypoint := apps[id].entrypoint
+		if et.Released() && apps[id] != nil {
+			disp.ClearDisplay()
+			time.Sleep(250 * time.Millisecond)
 
-			if entrypoint != nil {
-				disp.ClearDisplay()
-				time.Sleep(250 * time.Millisecond)
-
-				entrypoint()
-				reset.SoftReset()
-			}
+			apps[id].entrypoint()
+			reset.SoftReset()
 		}
 	}
 
@@ -66,7 +63,11 @@ func Run() {
 		func(et keypad.EventType) { handler(et, 9) },
 		nil,
 		nil,
-		nil,
+		func(et keypad.EventType) {
+			if et.Alt() && et.Released() {
+				bootloader.Run()
+			}
+		},
 		nil,
 	})
 

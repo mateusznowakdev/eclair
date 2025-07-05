@@ -1,7 +1,6 @@
 package launcher
 
 import (
-	"eclair/apps/bootloader"
 	"eclair/apps/erase"
 	"eclair/apps/flashlight"
 	"eclair/apps/mouse"
@@ -17,6 +16,6 @@ var apps = []*Entry{
 	{5, mouse.Run},
 	{6, flashlight.Run},
 	nil,
+	nil,
 	{7, erase.Run},
-	{8, bootloader.Run},
 }
