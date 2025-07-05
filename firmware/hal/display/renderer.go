@@ -116,7 +116,10 @@ func drawText(buffer []uint8, text []byte, x int, y int, align Alignment, cursor
 	}
 
 	if cursor == len(text) {
-		drawCursor(buffer, x-1, y)
+		if cursor > 0 {
+			x--
+		}
+		drawCursor(buffer, x, y)
 	}
 }
 
