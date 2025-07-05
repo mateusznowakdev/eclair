@@ -8,12 +8,15 @@ import (
 	"eclair/apps/notes"
 )
 
-var apps = []Entry{
-	{"note 1", func() { notes.Run(notes.DefaultName) }},
-	{"note 2", func() { notes.Run("note2.txt") }},
-	{"note 3", func() { notes.Run("note3.txt") }},
-	{"mouse", mouse.Run},
-	{"flashlight", flashlight.Run},
-	{"format", erase.Run},
-	{"bootloader", bootloader.Run},
+var apps = []*Entry{
+	{0, func() { notes.Run(notes.DefaultName) }},
+	{1, func() { notes.Run("note2.txt") }},
+	{2, func() { notes.Run("note3.txt") }},
+	{3, func() { notes.Run("note4.txt") }},
+	{4, func() { notes.Run("note5.txt") }},
+	{5, mouse.Run},
+	{6, flashlight.Run},
+	nil,
+	{7, erase.Run},
+	{8, bootloader.Run},
 }
