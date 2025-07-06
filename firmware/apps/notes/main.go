@@ -84,7 +84,7 @@ func handler(note *Note, shift bool, et keypad.EventType, alt func(), opts ...by
 }
 
 func insertExtra(note *Note) {
-	result := charmap.Run(disp)
+	result := charmap.Run()
 	if result > 0 {
 		note.insert(byte(result))
 	}

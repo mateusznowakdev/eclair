@@ -6,8 +6,8 @@ import (
 	"eclair/hal/watchdog"
 )
 
-var chars = [][]byte{
-	{'.', ',', ';', ':', '\'', '"', '-', '+'},
+var pages = [][]byte{
+	{'.', ',', '\'', '"', ';', ':', '-', '+'},
 	{'=', '?', '!', '@', '#', '$', '%', '^'},
 	{'&', '*', '(', ')', '[', ']', '<', '>'},
 	{'{', '}', '\\', '/', '|', '_', '~', '`'},
@@ -17,14 +17,27 @@ var chars = [][]byte{
 var disp *display.Display
 var keys *keypad.Keypad
 
-func refreshDisplay(posX int, posY int) {
-	disp.ClearBufferTop()
+func refreshDisplay(page int) {
+	disp.ClearDisplay()
 
-	for charNo, char := range chars[posY] {
-		disp.DrawText([]byte{char}, charNo*16+8, 0, display.AlignCenter)
+	disp.DrawSprite16(icons, 0, 2, 0, display.MaskNone, nil)
+	disp.DrawSprite16(icons, 1, 2, 16, display.MaskNone, nil)
+
+	for chrId, chr := range pages[page] {
+		x := 28*(chrId%4) + 36
+		y := 16*(chrId/4) + 0
+
+		// characters on the first page are too close to each other
+		if page == 0 && chrId < 4 {
+			y -= 1
+		}
+		if page == 0 && chrId >= 4 {
+			y += 1
+		}
+
+		disp.DrawText([]byte{chr}, x, y, display.AlignCenter)
 	}
 
-	// disp.DrawTextFrame(uint(posX*16), uint(posX*16+14), 0)
 	disp.Display()
 }
 
@@ -38,60 +51,44 @@ func wrap(value int, min int, max int) int {
 	return value
 }
 
-func Run(dispParent *display.Display) int {
-	posX := 0
-	posY := 0
-
+func Run() int {
+	page := 0
 	result := 0
 
-	// - using existing display instance to prevent it from being reset -
+	// - display -
 
-	disp = dispParent
+	disp = display.Configure()
 
 	// - keypad -
+
+	handler := func(et keypad.EventType, id int) {
+		if et.Released() {
+			result = int(pages[page][id])
+		}
+	}
 
 	keys = keypad.Configure()
 
 	keys.SetHandlers([]func(keypad.EventType){
 		func(et keypad.EventType) {
-			if et.Alt() && et.Released() {
+			if et.Released() {
 				result = -1
 			}
 		},
-		nil,
+		func(et keypad.EventType) { handler(et, 0) },
+		func(et keypad.EventType) { handler(et, 1) },
+		func(et keypad.EventType) { handler(et, 2) },
+		func(et keypad.EventType) { handler(et, 3) },
 		func(et keypad.EventType) {
 			if et.Released() {
-				posY = wrap(posY-1, 0, len(chars)-1)
-				refreshDisplay(posX, posY)
+				page = wrap(page+1, 0, len(pages)-1)
+				refreshDisplay(page)
 			}
 		},
-		nil,
-		nil,
-		nil,
-		func(et keypad.EventType) {
-			if et.Released() {
-				posX = wrap(posX-1, 0, len(chars[0])-1)
-				refreshDisplay(posX, posY)
-			}
-		},
-		func(et keypad.EventType) {
-			if et.Released() {
-				posY = wrap(posY+1, 0, len(chars)-1)
-				refreshDisplay(posX, posY)
-			}
-		},
-		func(et keypad.EventType) {
-			if et.Released() {
-				posX = wrap(posX+1, 0, len(chars[0])-1)
-				refreshDisplay(posX, posY)
-			}
-		},
-		func(et keypad.EventType) {
-			if et.Released() {
-				result = int(chars[posY][posX])
-			}
-		},
-		nil,
+		func(et keypad.EventType) { handler(et, 4) },
+		func(et keypad.EventType) { handler(et, 5) },
+		func(et keypad.EventType) { handler(et, 6) },
+		func(et keypad.EventType) { handler(et, 7) },
 		nil,
 		nil,
 		nil,
@@ -100,7 +97,7 @@ func Run(dispParent *display.Display) int {
 
 	// - main loop -
 
-	refreshDisplay(posX, posY)
+	refreshDisplay(page)
 
 	for result == 0 {
 		watchdog.Feed()
