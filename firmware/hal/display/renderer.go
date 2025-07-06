@@ -23,18 +23,25 @@ func drawCursor(buffer []byte, x int, y int) {
 }
 
 func drawSprite8(buffer []uint8, spritesheet [][]uint8, id int, x int, y int, align AlignType, mask MaskType, masksheet [][]uint8) {
+	sprite := spritesheet[id]
+	spriteWidth := len(sprite)
+
 	switch align {
 	case AlignCenter:
-		x -= len(spritesheet[id]) / 2
+		x -= spriteWidth / 2
 	case AlignRight:
-		x -= len(spritesheet[id])
+		x -= spriteWidth
 	default:
+	}
+
+	if x <= -spriteWidth || x >= Width || y <= -spriteHeight || y >= Height {
+		return
 	}
 
 	start := (y/8)*Width + x
 	shift := y % 8
 
-	for col := range spritesheet[id] {
+	for col := range sprite {
 		if x < 0 || x >= Width {
 			x++
 			continue
@@ -70,7 +77,7 @@ func drawSprite8(buffer []uint8, spritesheet [][]uint8, id int, x int, y int, al
 		// it so happens that the code below is very similar to the one above,
 		// but with OR instead of XOR+AND, and spriteData instead of maskData
 
-		colSprite := spritesheet[id][col]
+		colSprite := sprite[col]
 
 		if shift == 0 {
 			buffer[start+col] |= colSprite
