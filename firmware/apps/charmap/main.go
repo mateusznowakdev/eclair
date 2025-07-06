@@ -22,6 +22,8 @@ func refreshDisplay(page int) {
 
 	disp.DrawSprite16(icons, iconBack, 8, 0, display.AlignCenter, display.MaskNone, nil)
 	disp.DrawSprite16(icons, iconNextPage, 8, 16, display.AlignCenter, display.MaskNone, nil)
+	disp.DrawSprite16(icons, iconSeparator, 22, 0, display.AlignCenter, display.MaskNone, nil)
+	disp.DrawSprite16(icons, iconSeparator, 22, 16, display.AlignCenter, display.MaskNone, nil)
 
 	for chrId, chr := range pages[page] {
 		x := 28*(chrId%4) + 36
