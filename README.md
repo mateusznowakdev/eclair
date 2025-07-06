@@ -36,15 +36,15 @@ cd firmware
 tinygo flash -target eclair-m0 -size short
 ```
 
-## Updating font data
+## Updating sprite data
 
-Font data is stored in the `tools/newstroke.pbm` image file, with `tools/newstroke.txt` containing font widths. The image file can be edited in GIMP.
+Raw pixel data is stored in PGM (portable graymap) files, editable with GIMP. Spritesheet images must be 8px or 16px tall. The background is white, the foreground is black, and the mask information is gray/black (used when rendering sprites on top of each other).
 
-These source files can be converted into a working Go code, using the `tools/convert.py` script, which should work with any modern version of Python:
+Source files can be converted into a working Go code, using the `tools/make_spritesheet_data.py` script, which should work with any modern version of Python:
 
 ```bash
 cd tools
-python convert.py newstroke.pbm newstroke.txt > ../firmware/hal/display/font.go
+python3 make_spritesheet_data.py path/to/file.pgm path/to/file.txt
 ```
 
 ## 3D-printing the enclosure
