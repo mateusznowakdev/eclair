@@ -1,6 +1,7 @@
 package display
 
 import (
+	"encoding/base64"
 	"machine"
 
 	"eclair/hal/clocks"
@@ -64,6 +65,20 @@ func (d *Display) Display() {
 // Inverted returns the current invert state.
 func (d *Display) Inverted() bool {
 	return d.inverted
+}
+
+// Screenshot copies the buffer data onto serial console using base64 encoding.
+// This can be useful for debugging (use the parse_base64_screenshot.py script).
+func (d *Display) Screenshot() {
+	buffer := d.device.GetBuffer()
+	encoded := base64.StdEncoding.EncodeToString(buffer)
+
+	print("Buffer data:\r\n")
+	for start := 0; start < len(encoded); start += 80 {
+		end := min(start+80, len(encoded))
+		print(encoded[start:end], "\r\n")
+	}
+	print("Done.\r\n")
 }
 
 // SetContrast changes the contrast value and stores it in the Display instance
