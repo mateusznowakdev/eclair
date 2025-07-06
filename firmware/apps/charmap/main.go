@@ -20,8 +20,8 @@ var keys *keypad.Keypad
 func refreshDisplay(page int) {
 	disp.ClearDisplay()
 
-	disp.DrawSprite16(icons, 0, 2, 0, display.MaskNone, nil)
-	disp.DrawSprite16(icons, 1, 2, 16, display.MaskNone, nil)
+	disp.DrawSprite16(icons, iconBack, 2, 0, display.MaskNone, nil)
+	disp.DrawSprite16(icons, iconNextPage, 2, 16, display.MaskNone, nil)
 
 	for chrId, chr := range pages[page] {
 		x := 28*(chrId%4) + 36
@@ -89,6 +89,7 @@ func Run() int {
 		func(et keypad.EventType) { handler(et, 5) },
 		func(et keypad.EventType) { handler(et, 6) },
 		func(et keypad.EventType) { handler(et, 7) },
+		nil,
 		nil,
 		nil,
 		nil,

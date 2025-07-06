@@ -16,7 +16,8 @@ func Run() {
 	disp = display.Configure()
 
 	disp.ClearBuffer()
-	disp.DrawText([]byte("- hold any key -"), display.Width/2, 8, display.AlignCenter)
+	disp.DrawSprite16(icons, 0, 0, 0, display.MaskNone, nil)
+	disp.DrawText([]byte("Hold any key"), display.Width/2+8, 16, display.AlignCenter)
 	disp.Display()
 
 	disp.SetContrast(display.ContrastLow)
@@ -37,10 +38,9 @@ func Run() {
 
 	keys.SetHandlers([]func(keypad.EventType){
 		func(et keypad.EventType) {
-			if et.Alt() && et.Released() {
+			if et.Released() {
 				reset.SoftReset()
 			}
-			handler(et)
 		},
 		handler,
 		handler,
