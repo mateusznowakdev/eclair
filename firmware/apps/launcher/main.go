@@ -22,16 +22,16 @@ func Run() {
 	// - display -
 
 	disp = display.Configure()
-	disp.ClearDisplay()
+	disp.ClearBuffer()
 
 	for appId, app := range apps {
 		if app == nil {
 			continue
 		}
 
-		x := 28*(appId%5) + 2
+		x := 28*(appId%5) + 8
 		y := 20*(appId/5) - 2
-		disp.DrawSprite16(icons, app.icon, x, y, display.MaskNone, nil)
+		disp.DrawSprite16(icons, app.icon, x, y, display.AlignCenter, display.MaskNone, nil)
 	}
 
 	disp.Display()
@@ -40,7 +40,8 @@ func Run() {
 
 	handler := func(et keypad.EventType, id int) {
 		if et.Released() && apps[id] != nil {
-			disp.ClearDisplay()
+			disp.ClearBuffer()
+			disp.Display()
 			time.Sleep(250 * time.Millisecond)
 
 			apps[id].entrypoint()

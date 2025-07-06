@@ -51,11 +51,6 @@ func (d *Display) ClearBuffer() {
 	d.device.ClearBuffer()
 }
 
-// ClearDisplay clears the display buffer and sends it to the display.
-func (d *Display) ClearDisplay() {
-	d.device.ClearDisplay()
-}
-
 // Contrast returns the current contrast value.
 func (d *Display) Contrast() uint8 {
 	return d.contrast

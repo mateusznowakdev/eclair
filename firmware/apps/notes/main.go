@@ -123,13 +123,13 @@ func refreshDisplay(note *Note, shift bool) {
 	disp.DrawMultiText(note.data, note.cursor)
 
 	if note.dirty() {
-		disp.DrawSprite8(icons, iconFile, display.Width-8, 0, display.MaskAll, nil)
+		disp.DrawSprite8(icons, iconFile, display.Width, 0, display.AlignRight, display.MaskAll, nil)
 	} else if !batt.Good() {
-		disp.DrawSprite8(icons, iconBattery, display.Width-8, 0, display.MaskAll, nil)
+		disp.DrawSprite8(icons, iconBattery, display.Width, 0, display.AlignRight, display.MaskAll, nil)
 	}
 
 	if shift {
-		disp.DrawSprite8(icons, iconShift, 0, 0, display.MaskAll, nil)
+		disp.DrawSprite8(icons, iconShift, 0, 0, display.AlignLeft, display.MaskAll, nil)
 	}
 
 	disp.Display()

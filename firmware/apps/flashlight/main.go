@@ -16,7 +16,7 @@ func Run() {
 	disp = display.Configure()
 
 	disp.ClearBuffer()
-	disp.DrawSprite16(icons, 0, 0, 0, display.MaskNone, nil)
+	disp.DrawSprite16(icons, iconBack, 8, 0, display.AlignCenter, display.MaskNone, nil)
 	disp.DrawText([]byte("Hold any key"), display.Width/2+8, 16, display.AlignCenter)
 	disp.Display()
 

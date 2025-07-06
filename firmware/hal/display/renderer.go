@@ -3,7 +3,7 @@ package display
 const spriteHeight = 8
 
 const (
-	AlignLeft Alignment = iota
+	AlignLeft AlignType = iota
 	AlignCenter
 	AlignRight
 )
@@ -14,16 +14,23 @@ const (
 	MaskCustom
 )
 
-type Alignment int
-
+type AlignType int
 type MaskType int
 
 func drawCursor(buffer []byte, x int, y int) {
-	drawSprite8(buffer, cursor, 0, x, y, MaskAll, nil)
-	drawSprite8(buffer, cursor, 0, x, y+8, MaskAll, nil)
+	drawSprite8(buffer, cursor, 0, x, y, AlignLeft, MaskAll, nil)
+	drawSprite8(buffer, cursor, 0, x, y+8, AlignLeft, MaskAll, nil)
 }
 
-func drawSprite8(buffer []uint8, spritesheet [][]uint8, id int, x int, y int, mask MaskType, masksheet [][]uint8) {
+func drawSprite8(buffer []uint8, spritesheet [][]uint8, id int, x int, y int, align AlignType, mask MaskType, masksheet [][]uint8) {
+	switch align {
+	case AlignCenter:
+		x -= len(spritesheet[id]) / 2
+	case AlignRight:
+		x -= len(spritesheet[id])
+	default:
+	}
+
 	start := (y/8)*Width + x
 	shift := y % 8
 
@@ -60,8 +67,8 @@ func drawSprite8(buffer []uint8, spritesheet [][]uint8, id int, x int, y int, ma
 			}
 		}
 
-		// It so happens that this is a very similar code as above,
-		// but with OR instead of XOR+AND, and spriteData instead of maskData.
+		// it so happens that the code below is very similar to the one above,
+		// but with OR instead of XOR+AND, and spriteData instead of maskData
 
 		colSprite := spritesheet[id][col]
 
@@ -80,13 +87,13 @@ func drawSprite8(buffer []uint8, spritesheet [][]uint8, id int, x int, y int, ma
 	}
 }
 
-func drawSprite16(buffer []uint8, spritesheet [][]uint8, id int, x int, y int, mask MaskType, masksheet [][]uint8) {
+func drawSprite16(buffer []uint8, spritesheet [][]uint8, id int, x int, y int, align AlignType, mask MaskType, masksheet [][]uint8) {
 	count := len(spritesheet) / 2
-	drawSprite8(buffer, spritesheet, id, x, y, mask, masksheet)
-	drawSprite8(buffer, spritesheet, count+id, x, y+8, mask, masksheet)
+	drawSprite8(buffer, spritesheet, id, x, y, align, mask, masksheet)
+	drawSprite8(buffer, spritesheet, count+id, x, y+8, align, mask, masksheet)
 }
 
-func drawText(buffer []uint8, text []byte, x int, y int, align Alignment, cursor int) {
+func drawText(buffer []uint8, text []byte, x int, y int, align AlignType, cursor int) {
 	sprites := make([]int, len(text))
 	widths := make([]int, len(text))
 	widthTotal := 0
@@ -98,6 +105,8 @@ func drawText(buffer []uint8, text []byte, x int, y int, align Alignment, cursor
 		widthTotal += w
 	}
 
+	// glyphs have more padding to the left than to the right,
+	// therefore this code is slightly different to drawSprite8
 	switch align {
 	case AlignCenter:
 		x -= widthTotal/2 + 1
@@ -107,7 +116,7 @@ func drawText(buffer []uint8, text []byte, x int, y int, align Alignment, cursor
 	}
 
 	for charNo, spriteId := range sprites {
-		drawSprite16(buffer, font, spriteId, x, y, MaskAll, nil)
+		drawSprite16(buffer, font, spriteId, x, y, AlignLeft, MaskAll, nil)
 		if cursor == charNo {
 			drawCursor(buffer, x, y)
 		}
@@ -137,17 +146,17 @@ func getGlyphIDWidth(char byte) (int, int) {
 
 // DrawSprite8 copies sprite data (8px tall) to the display buffer at given
 // position.
-func (d *Display) DrawSprite8(spritesheet [][]uint8, id int, x int, y int, mask MaskType, masksheet [][]uint8) {
-	drawSprite8(d.device.GetBuffer(), spritesheet, id, x, y, mask, masksheet)
+func (d *Display) DrawSprite8(spritesheet [][]uint8, id int, x int, y int, align AlignType, mask MaskType, masksheet [][]uint8) {
+	drawSprite8(d.device.GetBuffer(), spritesheet, id, x, y, align, mask, masksheet)
 }
 
 // DrawSprite16 copies sprite data (16px tall) to the display buffer at given
 // position.
-func (d *Display) DrawSprite16(spritesheet [][]uint8, id int, x int, y int, mask MaskType, masksheet [][]uint8) {
-	drawSprite16(d.device.GetBuffer(), spritesheet, id, x, y, mask, masksheet)
+func (d *Display) DrawSprite16(spritesheet [][]uint8, id int, x int, y int, align AlignType, mask MaskType, masksheet [][]uint8) {
+	drawSprite16(d.device.GetBuffer(), spritesheet, id, x, y, align, mask, masksheet)
 }
 
 // DrawText renders text to the display buffer at given position.
-func (d *Display) DrawText(text []byte, x int, y int, align Alignment) {
+func (d *Display) DrawText(text []byte, x int, y int, align AlignType) {
 	drawText(d.device.GetBuffer(), text, x, y, align, -1)
 }
