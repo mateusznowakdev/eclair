@@ -86,6 +86,11 @@ The best idea is to set the spindle so it barely touches the enclosure at the hi
 
 ### Software
 
+Version 1.3:
+
+- Added two more slots for notes, for a total of 5
+- Changed the user interface in all apps
+
 Version 1.2:
 
 - Added two more slots for notes
